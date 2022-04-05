@@ -11,22 +11,22 @@ void menu (int kilometros, float precioAero, float precioLatam)
 {
 	if (kilometros == 0)
 	{
-		puts ("1. Ingresar Kilómetros: (KM = No Ingresado)");
+		puts ("1. Ingresar Kilometros: (KM = No Ingresado)");
 	}
 	else
 	{
-		printf ("1. Ingresar Kilómetros: (KM = %d)\n", kilometros);
+		printf ("1. Ingresar Kilometros: (KM = %d)\n", kilometros);
 	}
 
-	puts ("2. Ingresar Precio de Vuelos: (Aerolíneas = A, Latam = L)");
+	puts ("2. Ingresar Precio de Vuelos: (Aerolineas = A, Latam = L)");
 
 	if (precioAero == 0)
 	{
-		puts ("  - Precio Aerolíneas: No Ingresado.");
+		puts ("  - Precio Aerolineas: No Ingresado.");
 	}
 	else
 	{
-		printf ("  - Precio Aerolíneas: $%.2f.\n", precioAero);
+		printf ("  - Precio Aerolineas: $%.2f.\n", precioAero);
 	}
 	if (precioLatam == 0)
 	{
@@ -50,7 +50,7 @@ void saltoDeLinea(void)
 }
 
 //ingreso de un Entero
-int getInt (int * nroIngresado, char *mensaje, char* mensajeError, int min)
+int getInt (int* nroIngresado, char* mensaje, char* mensajeError, int min)
 {
 	int num;
 	while (1)
@@ -59,7 +59,7 @@ int getInt (int * nroIngresado, char *mensaje, char* mensajeError, int min)
 		fflush(stdin);
 		if (scanf("%d", &num) == 1)
 		{
-			if (num >= min)
+			if (num > min)
 			{
 				break;
 			}
@@ -81,7 +81,7 @@ int getFloat (float * nroIngresado, char *mensaje, char* mensajeError, float min
 		fflush(stdin);
 		if (scanf("%f", &num) == 1)
 		{
-			if (num >= min)
+			if (num > min)
 			{
 				break;
 			}
@@ -108,23 +108,10 @@ unsigned int validacionCaracteres (char *mensaje, char caracterUno, char caracte
 	charIngresado = toupper(getchar());
 	while (charIngresado != caracterUno && charIngresado != caracterDos)
 	{
-		printf ("Ingrese una opción válida (%c/%c): ", caracterUno, caracterDos);
+		printf ("Ingrese una opcion valida (%c/%c): ", caracterUno, caracterDos);
 		fflush (stdin);
 		charIngresado = toupper(getchar());
 	}
 	return (charIngresado == caracterUno);
 }
-/*
-void ingresoOtroVuelo (char* mensaje, char* vueloUno, char* vueloDos , float* precioVueloUno, float* precioVueloDos)
-{
-	strcat (mensaje, vueloUno);
-	strcat (mensaje, ":");
-	printf (mensaje);
-	*precioVueloUno = getFloat(mensaje);
-	if(validacionCaracteres("\nDesea ingresar otra aerolinea? (S/N) ", 'S', 'N'))
-	{
-		strcat (mensaje, vueloDos);
-		strcat (mensaje, ":");
-		*precioVueloDos = getFloat(mensaje);
-	}
-}*/
+

@@ -23,23 +23,21 @@ void validacionCalculo(int kilometros, float precioAero, float precioLatam, floa
 	if (kilometros != 0 && precioAero !=0)  //verifico que ingrese kilometros y precio de Aerolinea
 	{
 		calculoVuelo(kilometros, precioAero, &debitoA, &creditoA, &bitcoinA, &unitarioA);
-		puts ("Calculo de Aerolineas realizado.");
 	}
 
 	if (kilometros != 0 && precioLatam !=0) //verifico que ingrese kilometros y precio de Latam
 	{
 		calculoVuelo(kilometros,precioLatam, &debitoL, &creditoL, &bitcoinL, &unitarioL);
-		puts ("Calculo de Latam realizado.");
 	}
 
 	if (kilometros == 0) //Si no ingreso kilometros no realizo ningun calculo y aviso por mensaje
 	{
-		puts ("Todavia no ingresaste los kilómetros por lo que no se puede realizar los cálculos.");
+		puts ("Todavia no ingresaste los kilometros por lo que no se puede realizar los calculos.");
 	}
 
 	if (precioAero == 0 && precioLatam == 0) //Si faltan ambos precios de aerolineas tampoco realizo el cálculo
 	{
-		puts ("Todavia no ingresaste ningun precio de vuelo por lo que no se puede realizar los cálculos.");
+		puts ("Todavia no ingresaste ningun precio de vuelo por lo que no se puede realizar los calculos.");
 	}
 	else	//En este caso como tengo ambos precios puedo realizar la diferencia de precios.
 	{
@@ -64,8 +62,8 @@ void calculoVuelo (int kilometros,float precioVuelo,float** debito,float** credi
 void mostrarResultados (char* vuelo, float precioVuelo, float debito,float credito, float bitcoin, float unitario)
 {
 	printf ("\nPrecio %s: $%.2f\n", vuelo, precioVuelo);
-	printf ("a)Precio con tarjeta de débito: $%.2f\n", debito);
-	printf ("b)Precio con tarjeta de crédito: $%.2f\n", credito);
+	printf ("a)Precio con tarjeta de debito: $%.2f\n", debito);
+	printf ("b)Precio con tarjeta de credito: $%.2f\n", credito);
 	printf ("c)Precio pagando con bitcoin: %.5f BTC\n", bitcoin);
 	printf ("d)Mostrar precio unitario: $%.2f por Km.\n", unitario);
 
@@ -74,7 +72,7 @@ void mostrarResultados (char* vuelo, float precioVuelo, float debito,float credi
 //Función para mostrar la diferencia de precios si hay ambos precios de vuelos.
 void mostrarDiferencia (float diferenciaPrecio)
 {
-	printf ("La diferencia de precio es: $%.2f\n", diferenciaPrecio);
+	printf ("\nLa diferencia de precio es: $%.2f\n", diferenciaPrecio);
 	saltoDeLinea();
 }
 
