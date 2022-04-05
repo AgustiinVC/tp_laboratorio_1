@@ -15,13 +15,12 @@
 #include <string.h>
 
 void menu (int kilometros, float precioAero, float precioLatam);
-int getInt (char *mensaje);
-float getFloat(char *mensaje);
+int getInt (int * nroIngresado, char *mensaje, char* mensajeError, int min);
+int getFloat (float * nroIngresado, char *mensaje, char* mensajeError, float min);
 
 unsigned int validacionCaracteres (char *mensaje, char caracterUno, char caracterDos);
 
 void saltoDeLinea(void);
-void alerta (char *mensaje);
 
 //void ingresoOtroVuelo (char* mensaje, char* vueloUno, char* vueloDos , float* precioVueloUno, float* precioVueloDos);
 

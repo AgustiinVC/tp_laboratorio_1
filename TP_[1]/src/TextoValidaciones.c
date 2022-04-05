@@ -50,38 +50,51 @@ void saltoDeLinea(void)
 }
 
 //ingreso de un Entero
-int getInt (char *mensaje)
+int getInt (int * nroIngresado, char *mensaje, char* mensajeError, int min)
 {
-	int nroIngresado;
-
-	printf (mensaje);
-	fflush (stdin);
-	scanf ("%d", &nroIngresado);
-	while (nroIngresado < 1)
+	int num;
+	while (1)
 	{
-		puts ("ingrese un número mayor a 0.");
-		fflush (stdin);
-		scanf ("%d", &nroIngresado);
+		printf(mensaje);
+		fflush(stdin);
+		if (scanf("%d", &num) == 1)
+		{
+			if (num >= min)
+			{
+				break;
+			}
+
+		}
+		printf(mensajeError);
 	}
-	return nroIngresado;
+	*nroIngresado = num;
+	return 0;
 }
 
 //Ingreso de un float
-float getFloat (char *mensaje)
+int getFloat (float * nroIngresado, char *mensaje, char* mensajeError, float min)
 {
-	float nroIngresado;
-
-	printf (mensaje);
-	fflush (stdin);
-	scanf ("%f", &nroIngresado);
-	while (nroIngresado < 1)
+	float num;
+	while (1)
 	{
-		puts ("ingrese un número mayor a 0.");
-		fflush (stdin);
-		scanf ("%f", &nroIngresado);
+		printf(mensaje);
+		fflush(stdin);
+		if (scanf("%f", &num) == 1)
+		{
+			if (num >= min)
+			{
+				break;
+			}
+
+		}
+		printf(mensajeError);
 	}
-	return nroIngresado;
+	*nroIngresado = num;
+	return 0;
 }
+
+
+
 
 /* En ValidacionCaracter validamos el tipo de caracter que se ingresa.
  * Si ingresa cualquier otra cosa sigue preguntando hasta que se ingrese los caracteres correctos. Luego devolvemos un 1 o 0 al main.
@@ -115,8 +128,3 @@ void ingresoOtroVuelo (char* mensaje, char* vueloUno, char* vueloDos , float* pr
 		*precioVueloDos = getFloat(mensaje);
 	}
 }*/
-
-void alerta (char *mensaje)
-{
-	puts (mensaje);
-}

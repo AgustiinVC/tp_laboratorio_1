@@ -39,36 +39,38 @@ int main(void) {
 	do
 	{
 		menu(kilometros, precioAero, precioLatam);  // Menu con opciones
-
-		nroIngresado = getInt ("\nIngrese un numero: "); //Ingreso la opción a elegir del menu
+		getInt (&nroIngresado ,"\nIngrese un numero: ", "Error. Ingrese solo números.\n",1); //Ingreso la opción a elegir del menu
 
 		switch (nroIngresado)
 		{
 			//Case 1 es el ingreso de los kilómetros.
 			case 1:
-				kilometros = getInt("1. Ingresar Kilómetros: ");
+				getInt (&kilometros ,"\nIngrese los kilómetros: ", "Ingrese un kilometraje válido.\n",1);
 				break;
 
 			//Case 2 es el ingreso del precio de los vuelos.
 			case 2:
 				//Guardamos en la variable aerolineaElegida un 1 o 0. Si es un 1 sera Aerolineas y si es un 0 será Latam.
 				aerolineaElegida = validacionCaracteres("\nIngresar el tipo de aerolinea a ingresar (Aerolíneas = A, Latam = L): ", 'A', 'L');
+
 				if (aerolineaElegida)
 				{
 					//ingresoOtroVuelo ("Ingresar el precio de ", "Aerolineas","Latam", &precioAero, &precioLatam);
-					precioAero = getFloat("Ingresar el precio de Aerolineas: ");
+					getFloat (&precioAero ,"Ingresar el precio de Aerolineas: ", "Ingrese un kilometraje válido.\n",1);
+
 					//Le damos la opcion al usuario a ingresar el precio de la otra aerolinea si asi lo prefiere.
 					if(validacionCaracteres("\nDesea ingresar otra aerolinea? (S/N) ", 'S', 'N'))
 					{
-						precioLatam = getFloat("Ingresar el precio de Latam: ");
+						getFloat (&precioLatam ,"Ingresar el precio de Latam: ", "Ingrese un precio del vuelo válido.\n",1);
 					}
 				}
 				else
 				{
-					precioLatam = getFloat("Ingresar el precio de Latam: ");
+					getFloat (&precioLatam ,"Ingresar el precio de Latam: ", "Ingrese un precio del vuelo válido.\n",1);
+
 					if(validacionCaracteres("\nDesea ingresar otra aerolinea? (S/N) ", 'S', 'N'))
 					{
-						precioAero = getFloat("Ingresar el precio de Aerolineas: ");
+						getFloat (&precioAero ,"Ingresar el precio de Aerolineas: ", "Ingrese un precio del vuelo válido.\n",1);
 					}
 				}
 				break;
@@ -105,7 +107,7 @@ int main(void) {
 			else
 			{
 				//En caso de que no se ingreso datos suficientes salta este mensaje y no se calcula nada
-				alerta("Te falta calcular los datos.");
+				puts("Te falta calcular los datos.");
 			}
 			break;
 
@@ -129,12 +131,12 @@ int main(void) {
 
 		case 6:
 			//mensaje que se muestra al salir del programa
-			alerta ("\nGracias por usar este programa. Saludos!");
+			puts ("\nGracias por usar este programa. Saludos!");
 			break;
 
 		default:
 			//Cada vez que se ingrese un número incorrecto salta este mensaje.
-			alerta("Número Ingresado incorrecto. Ingrese otro.");
+			puts("Número Ingresado incorrecto. Ingrese otro.");
 
 		}
 		saltoDeLinea();
