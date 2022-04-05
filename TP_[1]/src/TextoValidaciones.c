@@ -2,10 +2,11 @@
  * TextoValidaciones.c
  *
  *  Created on: 1 abr. 2022
- *      Author: Agostin
+ *      Author: Agustin
  */
 #include "TextoValidaciones.h"
 
+//Menu con todas las opciones que se pueden elegir.
 void menu (int kilometros, float precioAero, float precioLatam)
 {
 	if (kilometros == 0)
@@ -42,12 +43,13 @@ void menu (int kilometros, float precioAero, float precioLatam)
 	puts ("6. Salir");
 }
 
+//salto de linea para emprolijar y ordenar lo que uno ve
 void saltoDeLinea(void)
 {
 	puts("-------------------------------------------------------");
 }
 
-
+//ingreso de un Entero
 int getInt (char *mensaje)
 {
 	int nroIngresado;
@@ -64,6 +66,7 @@ int getInt (char *mensaje)
 	return nroIngresado;
 }
 
+//Ingreso de un float
 float getFloat (char *mensaje)
 {
 	float nroIngresado;
@@ -80,36 +83,38 @@ float getFloat (char *mensaje)
 	return nroIngresado;
 }
 
+/* En ValidacionCaracter validamos el tipo de caracter que se ingresa.
+ * Si ingresa cualquier otra cosa sigue preguntando hasta que se ingrese los caracteres correctos. Luego devolvemos un 1 o 0 al main.
+ * Siendo 1 si es el primer caracter y 0 si es el segundo.*/
 
-unsigned int validacionAero (void)
-{
-	char charIngresado;
-	printf("\nIngresar el tipo de aerolinea a ingresar (Aerolíneas = A, Latam = L): ");
-	fflush (stdin);
-	charIngresado = toupper(getchar());
-	while (charIngresado != 'L' && charIngresado !='A')
-	{
-		printf ("Ingrese una aerolinea válida: ");
-		fflush (stdin);
-		charIngresado = toupper(getchar());
-	}
-	return (charIngresado == 'A');
-}
-
-unsigned int validacionSiNo (char *mensaje)
+unsigned int validacionCaracteres (char *mensaje, char caracterUno, char caracterDos)
 {
 	char charIngresado;
 	printf(mensaje);
 	fflush (stdin);
 	charIngresado = toupper(getchar());
-	while (charIngresado != 'S' && charIngresado !='N')
+	while (charIngresado != caracterUno && charIngresado != caracterDos)
 	{
-		printf ("Ingrese una opción válida (S/N): ");
+		printf ("Ingrese una opción válida (%c/%c): ", caracterUno, caracterDos);
 		fflush (stdin);
 		charIngresado = toupper(getchar());
 	}
-	return (charIngresado == 'S');
+	return (charIngresado == caracterUno);
 }
+/*
+void ingresoOtroVuelo (char* mensaje, char* vueloUno, char* vueloDos , float* precioVueloUno, float* precioVueloDos)
+{
+	strcat (mensaje, vueloUno);
+	strcat (mensaje, ":");
+	printf (mensaje);
+	*precioVueloUno = getFloat(mensaje);
+	if(validacionCaracteres("\nDesea ingresar otra aerolinea? (S/N) ", 'S', 'N'))
+	{
+		strcat (mensaje, vueloDos);
+		strcat (mensaje, ":");
+		*precioVueloDos = getFloat(mensaje);
+	}
+}*/
 
 void alerta (char *mensaje)
 {

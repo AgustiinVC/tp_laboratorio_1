@@ -17,7 +17,7 @@ int main(void) {
 	setbuf(stdout,NULL);
 
 	int nroIngresado;
-	char aerolineaElegida;
+	int  aerolineaElegida;
 
 	int kilometros = 0;
 	float precioAero = 0;
@@ -38,32 +38,40 @@ int main(void) {
 
 	do
 	{
-		menu(kilometros, precioAero, precioLatam);
-		nroIngresado = getInt ("\nIngrese un numero: ");
-		switch (nroIngresado) {
-		case 1:
-			kilometros = getInt("1. Ingresar Kilómetros: ");
-			break;
+		menu(kilometros, precioAero, precioLatam);  // Menu con opciones
 
-		case 2:
-			aerolineaElegida = validacionAero();
-			if (aerolineaElegida)
-			{
-				precioAero = getFloat("Ingresar el precio de Aerolineas: ");
-				if(validacionSiNo("\nDesea ingresar otra aerolinea? (S/N) "))
+		nroIngresado = getInt ("\nIngrese un numero: "); //Ingreso la opción a elegir del menu
+
+		switch (nroIngresado)
+		{
+			//Case 1 es el ingreso de los kilómetros.
+			case 1:
+				kilometros = getInt("1. Ingresar Kilómetros: ");
+				break;
+
+			//Case 2 es el ingreso del precio de los vuelos.
+			case 2:
+				//Guardamos en la variable aerolineaElegida un 1 o 0. Si es un 1 sera Aerolineas y si es un 0 será Latam.
+				aerolineaElegida = validacionCaracteres("\nIngresar el tipo de aerolinea a ingresar (Aerolíneas = A, Latam = L): ", 'A', 'L');
+				if (aerolineaElegida)
+				{
+					//ingresoOtroVuelo ("Ingresar el precio de ", "Aerolineas","Latam", &precioAero, &precioLatam);
+					precioAero = getFloat("Ingresar el precio de Aerolineas: ");
+					//Le damos la opcion al usuario a ingresar el precio de la otra aerolinea si asi lo prefiere.
+					if(validacionCaracteres("\nDesea ingresar otra aerolinea? (S/N) ", 'S', 'N'))
+					{
+						precioLatam = getFloat("Ingresar el precio de Latam: ");
+					}
+				}
+				else
 				{
 					precioLatam = getFloat("Ingresar el precio de Latam: ");
+					if(validacionCaracteres("\nDesea ingresar otra aerolinea? (S/N) ", 'S', 'N'))
+					{
+						precioAero = getFloat("Ingresar el precio de Aerolineas: ");
+					}
 				}
-			}
-			else
-			{
-				precioLatam = getFloat("Ingresar el precio de Latam: ");
-				if(validacionSiNo("\nDesea ingresar otra aerolinea? (S/N) "))
-				{
-					precioAero = getFloat("Ingresar el precio de Aerolineas: ");
-				}
-			}
-			break;
+				break;
 
 		case 3:
 			//calcular los costos. validar tener un vuelo
@@ -72,17 +80,21 @@ int main(void) {
 			break;
 
 		case 4:
-			//Informar resultados
+			//Informar resultados. Se utiliza una bandera para asegurarme que los calculos ya los realice para asi tener resultados para mostrar
 			if (flagCalculo != 0)
 			{
+				//Si no tengo precio de alguno de los vuelos puedo realizar el calculo del vuelo que si tengo
 				if (precioAero !=0)
 				{
-					mostrarResultadosAero ( precioAero, precioLatam, debitoA, creditoA,  bitcoinA,  unitarioA);
+
+					mostrarResultados("Aerolíneas" ,precioAero, debitoA, creditoA,  bitcoinA,  unitarioA);
 				}
 				if (precioLatam != 0)
 				{
-					mostrarResultadosLatam ( precioLatam, debitoL,  creditoL,  bitcoinL,  unitarioL);
+					mostrarResultados("Latam" ,precioLatam, debitoL,  creditoL,  bitcoinL,  unitarioL);
 				}
+
+				//Solo la diferencia se va a mostrar cuando tenga precios de ambos vuelos.
 				if (precioAero != 0 && precioLatam != 0)
 				{
 					mostrarDiferencia (diferenciaPrecio);
@@ -92,6 +104,7 @@ int main(void) {
 			}
 			else
 			{
+				//En caso de que no se ingreso datos suficientes salta este mensaje y no se calcula nada
 				alerta("Te falta calcular los datos.");
 			}
 			break;
@@ -99,22 +112,29 @@ int main(void) {
 		case 5:
 			//valores forzados y muestro
 			saltoDeLinea();
-			cargaForzada(&kilometros, &precioAero, &precioLatam);
-			printf ("KMs Ingresados: %d\n", kilometros);
-			validacionCalculo(kilometros, precioAero, precioLatam, &debitoA, &creditoA, &bitcoinA, &unitarioA, &debitoL, &creditoL, &bitcoinL, &unitarioL, &diferenciaPrecio);
-			mostrarResultadosAero ( precioAero, precioLatam, debitoA, creditoA,  bitcoinA,  unitarioA);
-			mostrarResultadosLatam ( precioLatam, debitoL,  creditoL,  bitcoinL,  unitarioL);
-			printf ("La diferencia de precio es: $%.2f\n", diferenciaPrecio);
 			saltoDeLinea();
+
+			cargaForzada(&kilometros, &precioAero, &precioLatam); //Le asigno los valores de la carga forzada a las variable de km y precios mediante punteros.
+			printf ("KMs Ingresados: %d\n", kilometros);
+			//Realizo la validacion de los datos que obtengo y el calculo de todos los valores que se necesitan.
+			validacionCalculo(kilometros, precioAero, precioLatam, &debitoA, &creditoA, &bitcoinA, &unitarioA, &debitoL, &creditoL, &bitcoinL, &unitarioL, &diferenciaPrecio);
+
+			//Luego de realizado los cálculos paso a mostrar los resultados obtenidos.
+			mostrarResultados("Aerolíneas" ,precioAero, debitoA, creditoA,  bitcoinA,  unitarioA);
+			mostrarResultados("Latam" ,precioLatam, debitoL,  creditoL,  bitcoinL,  unitarioL);
+			mostrarDiferencia (diferenciaPrecio);
+			//Una vez realizado la muestra de la carga forzada, le doy valor 6 a nroIngresado para asi salir del programa,
 			nroIngresado = 6;
-			break;
+ 			break;
 
 		case 6:
+			//mensaje que se muestra al salir del programa
 			alerta ("\nGracias por usar este programa. Saludos!");
 			break;
 
 		default:
-			puts ("Número Ingresado incorrecto. Ingrese otro.");
+			//Cada vez que se ingrese un número incorrecto salta este mensaje.
+			alerta("Número Ingresado incorrecto. Ingrese otro.");
 
 		}
 		saltoDeLinea();
