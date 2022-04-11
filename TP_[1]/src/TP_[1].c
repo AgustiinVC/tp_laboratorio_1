@@ -46,6 +46,7 @@ int main(void) {
 			//Case 1 es el ingreso de los kilómetros.
 			case 1:
 				getInt (&kilometros ,"\nIngrese los kilometros: ", "Ingrese un kilometraje valido.\n",0);
+				flagCalculo = 0;
 				break;
 
 			//Case 2 es el ingreso del precio de los vuelos.
@@ -72,17 +73,18 @@ int main(void) {
 						getFloat (&precioAero ,"Ingresar el precio de Aerolineas: ", "Ingrese un precio del vuelo valido.\n",0);
 					}
 				}
+				flagCalculo = 0;
 				break;
 
 		case 3:
 			//calcular los costos. validar tener un vuelo
 			validacionCalculo(kilometros, precioAero, precioLatam, &debitoA, &creditoA, &bitcoinA, &unitarioA, &debitoL, &creditoL, &bitcoinL, &unitarioL, &diferenciaPrecio);
-			flagCalculo ++;
+			flagCalculo = 1;
 			break;
 
 		case 4:
 			//Informar resultados. Se utiliza una bandera para asegurarme que los calculos ya los realice para asi tener resultados para mostrar
-			if (flagCalculo != 0)
+			if (flagCalculo == 1)
 			{
 				saltoDeLinea();
 				printf ("KMs Ingresados: %d\n", kilometros);
@@ -102,7 +104,7 @@ int main(void) {
 				{
 					mostrarDiferencia (diferenciaPrecio);
 				}
-				if(validacionCaracteres("¿Desea Salir o volver al Menu? (S = salir, M = Menu)", 'S', 'M'))
+				if(validacionCaracteres("¿Desea Salir o volver al Menu? (S = Salir, M = Menu)", 'S', 'M'))
 				{
 					nroIngresado = 6;
 				}
@@ -110,18 +112,18 @@ int main(void) {
 			else
 			{
 				//En caso de que no se ingreso datos suficientes salta este mensaje y no se calcula nada
-				puts("Te falta calcular los datos.");
+				puts("Te falta calcular los costos. Presione Opcion 3 antes de mostrar resultados.");
 			}
 			break;
 
 		case 5:
 			//valores forzados y muestro
-			saltoDeLinea();
 			flagCalculo = 1;
 			cargaForzada(&kilometros, &precioAero, &precioLatam); //Le asigno los valores de la carga forzada a las variable de km y precios mediante punteros.
+			validacionCalculo(kilometros, precioAero, precioLatam, &debitoA, &creditoA, &bitcoinA, &unitarioA, &debitoL, &creditoL, &bitcoinL, &unitarioL, &diferenciaPrecio);
+			saltoDeLinea();
 			printf ("KMs Ingresados: %d\n", kilometros);
 			//Realizo la validacion de los datos que obtengo y el calculo de todos los valores que se necesitan.
-			validacionCalculo(kilometros, precioAero, precioLatam, &debitoA, &creditoA, &bitcoinA, &unitarioA, &debitoL, &creditoL, &bitcoinL, &unitarioL, &diferenciaPrecio);
 
 			//Luego de realizado los cálculos paso a mostrar los resultados obtenidos.
 			mostrarResultados("Aerolineas" ,precioAero, debitoA, creditoA,  bitcoinA,  unitarioA);
@@ -132,6 +134,7 @@ int main(void) {
 			{
 				nroIngresado = 6;
 			}
+			flagCalculo = 0;
 			break;
 
 

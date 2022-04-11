@@ -23,11 +23,13 @@ void validacionCalculo(int kilometros, float precioAero, float precioLatam, floa
 	if (kilometros != 0 && precioAero !=0)  //verifico que ingrese kilometros y precio de Aerolinea
 	{
 		calculoVuelo(kilometros, precioAero, &debitoA, &creditoA, &bitcoinA, &unitarioA);
+		puts ("Calculo de precios Aerolineas realizado.");
 	}
 
 	if (kilometros != 0 && precioLatam !=0) //verifico que ingrese kilometros y precio de Latam
 	{
 		calculoVuelo(kilometros,precioLatam, &debitoL, &creditoL, &bitcoinL, &unitarioL);
+		puts ("Calculo de precios Latam realizado.");
 	}
 
 	if (kilometros == 0) //Si no ingreso kilometros no realizo ningun calculo y aviso por mensaje
@@ -72,7 +74,16 @@ void mostrarResultados (char* vuelo, float precioVuelo, float debito,float credi
 //Función para mostrar la diferencia de precios si hay ambos precios de vuelos.
 void mostrarDiferencia (float diferenciaPrecio)
 {
-	printf ("\nLa diferencia de precio es: $%.2f\n", diferenciaPrecio);
+	if (diferenciaPrecio >= 0)
+	{
+		printf ("\nLa diferencia de precio es: $%.2f, siendo mas barato Latam.\n", diferenciaPrecio);
+
+	}
+	else
+	{
+		diferenciaPrecio = (-1) * diferenciaPrecio;
+		printf ("\nLa diferencia de precio es: $%.2f, siendo mas barato Aerolineas\n", diferenciaPrecio);
+	}
 	saltoDeLinea();
 }
 

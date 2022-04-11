@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+
 /// @fn void menu(int, float, float)
 /// @brief el menu que vamos a mostrar para ver las opciones.
 ///Este muno lo volvemos a ver con las modificaciones de los valores que se vayan ingresando
