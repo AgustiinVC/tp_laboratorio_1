@@ -56,4 +56,9 @@ unsigned int validacionCaracteres (char *mensaje, char caracterUno, char caracte
 ///
 void saltoDeLinea(void);
 
+/// @fn void presionarEnter(void)
+/// @brief
+///  funcion para pausar el programa y no continuar hasta presionar enter.
+void presionarEnter (void);
+
 #endif /* TEXTOVALIDACIONES_H_ */

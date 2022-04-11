@@ -49,6 +49,13 @@ void saltoDeLinea(void)
 	puts("-------------------------------------------------------");
 }
 
+void presionarEnter (void)
+{
+  printf ( "Presiona ENTER para continuar..." );
+  fflush (stdin);
+  getchar();
+}
+
 //ingreso de un Entero
 int getInt (int* nroIngresado, char* mensaje, char* mensajeError, int min)
 {

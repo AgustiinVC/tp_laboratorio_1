@@ -74,16 +74,19 @@ void mostrarResultados (char* vuelo, float precioVuelo, float debito,float credi
 //Función para mostrar la diferencia de precios si hay ambos precios de vuelos.
 void mostrarDiferencia (float diferenciaPrecio)
 {
-	if (diferenciaPrecio >= 0)
+	if (diferenciaPrecio > 0)
 	{
 		printf ("\nLa diferencia de precio es: $%.2f, siendo mas barato Latam.\n", diferenciaPrecio);
 
 	}
-	else
+	else if (diferenciaPrecio < 0)
 	{
 		diferenciaPrecio = (-1) * diferenciaPrecio;
 		printf ("\nLa diferencia de precio es: $%.2f, siendo mas barato Aerolineas\n", diferenciaPrecio);
 	}
-	saltoDeLinea();
+	else
+	{
+		printf ("\nLa diferencia de precio es: $%.2f, por lo que ambos vuelos valen igual.\n", diferenciaPrecio);
+	}
 }
 

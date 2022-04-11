@@ -79,6 +79,7 @@ int main(void) {
 		case 3:
 			//calcular los costos. validar tener un vuelo
 			validacionCalculo(kilometros, precioAero, precioLatam, &debitoA, &creditoA, &bitcoinA, &unitarioA, &debitoL, &creditoL, &bitcoinL, &unitarioL, &diferenciaPrecio);
+			presionarEnter();
 			flagCalculo = 1;
 			break;
 
@@ -104,6 +105,7 @@ int main(void) {
 				{
 					mostrarDiferencia (diferenciaPrecio);
 				}
+				saltoDeLinea();
 				if(validacionCaracteres("¿Desea Salir o volver al Menu? (S = Salir, M = Menu)", 'S', 'M'))
 				{
 					nroIngresado = 6;
@@ -113,6 +115,7 @@ int main(void) {
 			{
 				//En caso de que no se ingreso datos suficientes salta este mensaje y no se calcula nada
 				puts("Te falta calcular los costos. Presione Opcion 3 antes de mostrar resultados.");
+				presionarEnter();
 			}
 			break;
 
@@ -129,6 +132,7 @@ int main(void) {
 			mostrarResultados("Aerolineas" ,precioAero, debitoA, creditoA,  bitcoinA,  unitarioA);
 			mostrarResultados("Latam" ,precioLatam, debitoL,  creditoL,  bitcoinL,  unitarioL);
 			mostrarDiferencia (diferenciaPrecio);
+			saltoDeLinea();
 			//Una vez realizado la muestra de la carga forzada, le doy valor 6 a nroIngresado para asi salir del programa,
 			if(validacionCaracteres("\n¿Desea Salir o volver al Menu? (S = salir, M = Menu)", 'S', 'M'))
 			{
