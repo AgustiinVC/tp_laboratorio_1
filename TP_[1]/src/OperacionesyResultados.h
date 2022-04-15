@@ -21,7 +21,7 @@
 void cargaForzada (int* kilometros,float* precioAero,float* precioLatam);
 
 
-/// @fn void validacionCalculo(int, float, float, float*, float*, float*, float*, float*, float*, float*, float*, float*)
+/// @fn int validacionCalculo(int, float, float, float*, float*, float*, float*, float*, float*, float*, float*, float*)
 /// @brief aca realizamos la validacion y luego el calculo de los distintos precios para cada caso (debito, credito, bitcoin, unitario)
 /// A su vez usamos la funcion que se encuentra abajo para una vez validado que tenemos todos los datos necesarios poder hacer los calculos.
 /// @param kilometros
@@ -36,7 +36,8 @@ void cargaForzada (int* kilometros,float* precioAero,float* precioLatam);
 /// @param bitcoinL
 /// @param unitarioL
 /// @param diferenciaPrecio
-void validacionCalculo(int kilometros, float precioAero, float precioLatam, float* debitoA,float* creditoA, float* bitcoinA, float* unitarioA, float* debitoL, float* creditoL, float* bitcoinL, float* unitarioL, float* diferenciaPrecio);
+/// @return 0 cuando no se puede realizar el calculo por falta de kilometros y 1 cuando puedo realizar cualquier de los calculos
+int validacionCalculo(int kilometros, float precioAero, float precioLatam, float* debitoA,float* creditoA, float* bitcoinA, float* unitarioA, float* debitoL, float* creditoL, float* bitcoinL, float* unitarioL, float* diferenciaPrecio);
 
 
 /// @fn void calculoVuelo(int, float, float**, float**, float**, float**)

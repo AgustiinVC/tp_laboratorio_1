@@ -76,81 +76,76 @@ int main(void) {
 				flagCalculo = 0;
 				break;
 
-		case 3:
-			//calcular los costos. validar tener un vuelo
-			validacionCalculo(kilometros, precioAero, precioLatam, &debitoA, &creditoA, &bitcoinA, &unitarioA, &debitoL, &creditoL, &bitcoinL, &unitarioL, &diferenciaPrecio);
-			presionarEnter();
-			flagCalculo = 1;
-			break;
+			case 3:
+				//calcular los costos. validar tener un vuelo
+				flagCalculo = validacionCalculo(kilometros, precioAero, precioLatam, &debitoA, &creditoA, &bitcoinA, &unitarioA, &debitoL, &creditoL, &bitcoinL, &unitarioL, &diferenciaPrecio);
+				presionarEnter();
+				break;
 
-		case 4:
-			//Informar resultados. Se utiliza una bandera para asegurarme que los calculos ya los realice para asi tener resultados para mostrar
-			if (flagCalculo == 1)
-			{
+			case 4:
+				//Informar resultados. Se utiliza una bandera para asegurarme que los calculos ya los realice para asi tener resultados para mostrar
+				if (flagCalculo == 1)
+				{
+					saltoDeLinea();
+					printf ("KMs Ingresados: %d\n", kilometros);
+					//Si no tengo precio de alguno de los vuelos puedo realizar el calculo del vuelo que si tengo
+					if (precioAero !=0)
+					{
+						mostrarResultados("Aerolineas" ,precioAero, debitoA, creditoA,  bitcoinA,  unitarioA);
+					}
+					if (precioLatam != 0)
+					{
+						mostrarResultados("Latam" ,precioLatam, debitoL,  creditoL,  bitcoinL,  unitarioL);
+					}
+
+					//Solo la diferencia se va a mostrar cuando tenga precios de ambos vuelos.
+					if (precioAero != 0 && precioLatam != 0)
+					{
+						mostrarDiferencia (diferenciaPrecio);
+					}
+					saltoDeLinea();
+					if(validacionCaracteres("¿Desea Salir o volver al Menu? (S = Salir, M = Menu)", 'S', 'M'))
+					{
+						nroIngresado = 6;
+					}
+				}
+				else
+				{
+					//En caso de que no se ingreso datos suficientes salta este mensaje y no se calcula nada
+					puts("Te falta calcular los costos. Presione Opcion 3 antes de mostrar resultados.");
+					presionarEnter();
+				}
+				break;
+
+			case 5:
+				//valores forzados y muestro
+				cargaForzada(&kilometros, &precioAero, &precioLatam); //Le asigno los valores de la carga forzada a las variable de km y precios mediante punteros.
+				flagCalculo = validacionCalculo(kilometros, precioAero, precioLatam, &debitoA, &creditoA, &bitcoinA, &unitarioA, &debitoL, &creditoL, &bitcoinL, &unitarioL, &diferenciaPrecio);
 				saltoDeLinea();
 				printf ("KMs Ingresados: %d\n", kilometros);
-				//Si no tengo precio de alguno de los vuelos puedo realizar el calculo del vuelo que si tengo
-				if (precioAero !=0)
-				{
+				//Realizo la validacion de los datos que obtengo y el calculo de todos los valores que se necesitan.
 
-					mostrarResultados("Aerolineas" ,precioAero, debitoA, creditoA,  bitcoinA,  unitarioA);
-				}
-				if (precioLatam != 0)
-				{
-					mostrarResultados("Latam" ,precioLatam, debitoL,  creditoL,  bitcoinL,  unitarioL);
-				}
-
-				//Solo la diferencia se va a mostrar cuando tenga precios de ambos vuelos.
-				if (precioAero != 0 && precioLatam != 0)
-				{
-					mostrarDiferencia (diferenciaPrecio);
-				}
+				//Luego de realizado los cálculos paso a mostrar los resultados obtenidos.
+				mostrarResultados("Aerolineas" ,precioAero, debitoA, creditoA,  bitcoinA,  unitarioA);
+				mostrarResultados("Latam" ,precioLatam, debitoL,  creditoL,  bitcoinL,  unitarioL);
+				mostrarDiferencia (diferenciaPrecio);
 				saltoDeLinea();
-				if(validacionCaracteres("¿Desea Salir o volver al Menu? (S = Salir, M = Menu)", 'S', 'M'))
+				//Una vez realizado la muestra de la carga forzada, le doy valor 6 a nroIngresado para asi salir del programa,
+				if(validacionCaracteres("\n¿Desea Salir o volver al Menu? (S = salir, M = Menu)", 'S', 'M'))
 				{
 					nroIngresado = 6;
 				}
-			}
-			else
-			{
-				//En caso de que no se ingreso datos suficientes salta este mensaje y no se calcula nada
-				puts("Te falta calcular los costos. Presione Opcion 3 antes de mostrar resultados.");
-				presionarEnter();
-			}
-			break;
+				flagCalculo = 0;
+				break;
 
-		case 5:
-			//valores forzados y muestro
-			flagCalculo = 1;
-			cargaForzada(&kilometros, &precioAero, &precioLatam); //Le asigno los valores de la carga forzada a las variable de km y precios mediante punteros.
-			validacionCalculo(kilometros, precioAero, precioLatam, &debitoA, &creditoA, &bitcoinA, &unitarioA, &debitoL, &creditoL, &bitcoinL, &unitarioL, &diferenciaPrecio);
-			saltoDeLinea();
-			printf ("KMs Ingresados: %d\n", kilometros);
-			//Realizo la validacion de los datos que obtengo y el calculo de todos los valores que se necesitan.
+			case 6:
+				//mensaje que se muestra al salir del programa
+				puts ("\nGracias por usar este programa. Saludos!");
+				break;
 
-			//Luego de realizado los cálculos paso a mostrar los resultados obtenidos.
-			mostrarResultados("Aerolineas" ,precioAero, debitoA, creditoA,  bitcoinA,  unitarioA);
-			mostrarResultados("Latam" ,precioLatam, debitoL,  creditoL,  bitcoinL,  unitarioL);
-			mostrarDiferencia (diferenciaPrecio);
-			saltoDeLinea();
-			//Una vez realizado la muestra de la carga forzada, le doy valor 6 a nroIngresado para asi salir del programa,
-			if(validacionCaracteres("\n¿Desea Salir o volver al Menu? (S = salir, M = Menu)", 'S', 'M'))
-			{
-				nroIngresado = 6;
-			}
-			flagCalculo = 0;
-			break;
-
-
-
-		case 6:
-			//mensaje que se muestra al salir del programa
-			puts ("\nGracias por usar este programa. Saludos!");
-			break;
-
-		default:
-			//Cada vez que se ingrese un número incorrecto salta este mensaje.
-			puts("Número Ingresado incorrecto. Ingrese otro.");
+			default:
+				//Cada vez que se ingrese un número incorrecto salta este mensaje.
+				puts("Número Ingresado incorrecto. Ingrese otro.");
 
 		}
 		saltoDeLinea();

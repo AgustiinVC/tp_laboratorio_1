@@ -56,7 +56,7 @@ void presionarEnter (void)
   getchar();
 }
 
-//ingreso de un Entero
+//ingreso de un Entero mayor a 0.
 int getInt (int* nroIngresado, char* mensaje, char* mensajeError, int min)
 {
 	int num;
@@ -78,7 +78,7 @@ int getInt (int* nroIngresado, char* mensaje, char* mensajeError, int min)
 	return 0;
 }
 
-//Ingreso de un float
+//Ingreso de un float mayor a 0
 int getFloat (float * nroIngresado, char *mensaje, char* mensajeError, float min)
 {
 	float num;
