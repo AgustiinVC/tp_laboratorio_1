@@ -29,9 +29,8 @@ int main(void) {
 	do
 	{
 		menu();
+		utn_getIntRange (&opcion ,"\nIngrese una Opcion: ", "Error. Ingrese una opcion correcta.\n",1,6);
 		fflush (stdin);
-		utn_getIntPositivo (&opcion ,"\nIngrese una Opcion: ", "Error. Ingrese una opcion correcta.\n");
-
 		switch (opcion)
 		{
 			case 1: //Alta
@@ -73,11 +72,15 @@ int main(void) {
 				break;
 
 			case 5: //Alta forzada
+				if (altaForzadaPasajeros (miPasajero, CANT_PASAJEROS) == 0)
+				{
+					puts ("\nAlta realizada.");
+				}
+				else
+				{
+					puts ("Alta forzada ya cargada.");
+				}
 				break;
-
-			default:
-				puts ("Ingrese una opcion valida");
-
 		}
 	}
 	while (opcion != 6);

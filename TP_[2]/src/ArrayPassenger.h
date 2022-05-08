@@ -15,6 +15,11 @@
 #define OCUPADO 1
 #define BAJA -1
 
+#define ACTIVO 1
+#define DEMORADO 2
+#define CANCELADO 3
+
+
 #define TEXT_LEN 51
 #define CODIGO 10
 
@@ -45,10 +50,13 @@ int pas_isStrucEmpty (Passenger* list, int len);
 int pas_CalculosPasaje (Passenger* list, int len);
 int printPassenger(Passenger* list, int length);
 void pas_printOne (Passenger* list, int index);
+int printActivePassenger(Passenger* list, int length);
 int sortPassengers(Passenger* list, int len, int order);
 int sortPassengersByCode(Passenger* list, int len, int order);
 int compararCadenas (char* cadenaUno, char* cadenaDos);
 void toLowerCadena (char* cadena);
+int altaForzadaPasajeros (Passenger* list, int len);
+Passenger pas_UnPasajeroForzado (int indiceLibre, char* name, char* lastname, float price,char* codeFlight,int typePassenger);
 void menu (void);
 
 

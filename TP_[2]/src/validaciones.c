@@ -81,7 +81,6 @@ int utn_getString(char* charIngresado, char* mensaje, char* mensajeError, int le
 		{
 			reintentos--;
 			printf (mensaje);
-			fflush(stdin);
 
 			if (getString (buffer, sizeof(buffer)) == 1 && strnlen(buffer, sizeof(buffer)) < len)
 			{
@@ -112,7 +111,6 @@ int utn_getNombre(char* charIngresado, char* mensaje, char* mensajeError, int le
 		{
 			reintentos--;
 			printf (mensaje);
-			fflush(stdin);
 			if (getNombre (buffer, sizeof(buffer)) == 1 && strnlen(buffer, sizeof(buffer)) < len)
 			{
 				strncpy(charIngresado , buffer, len );
@@ -136,7 +134,7 @@ int utn_getDescripcion (char* charIngresado, char* mensaje, char* mensajeError, 
 		{
 			reintentos--;
 			printf (mensaje);
-			fflush(stdin);
+
 			if (getDescripcion (buffer, sizeof(buffer)) == 1 && strnlen(buffer, sizeof(buffer)) < len)
 			{
 				strncpy (charIngresado, buffer, len );
@@ -160,8 +158,8 @@ int utn_getDNI(char* pNumeroIngresado, char* mensaje, char* mensajeError, int le
 		{
 			reintentos--;
 			printf (mensaje);
-			fflush(stdin);
-			if ( getDNI (bufferDNI, sizeof(bufferDNI)) && strnlen(bufferDNI, sizeof(bufferDNI)) < len)
+
+			if ( getDNI (bufferDNI, sizeof(bufferDNI)) == 1 && strnlen(bufferDNI, sizeof(bufferDNI)) < len)
 			{
 				strncpy (pNumeroIngresado, bufferDNI, len );
 				rtn = 0;
@@ -174,7 +172,7 @@ int utn_getDNI(char* pNumeroIngresado, char* mensaje, char* mensajeError, int le
 
 		if (reintentos == 0)
 		{
-			rtn = 0;
+			rtn = -2;
 		}
 	}
 	return rtn;
@@ -191,13 +189,13 @@ int utn_getInt(int* pNumeroIngresado, char* mensaje, char* mensajeError, int min
 		{
 			printf (mensaje);
 
-			if ( getInt (&bufferInt) && bufferInt >= min &&bufferInt <= max )
+			if (getInt (&bufferInt) == 1 && bufferInt >= min && bufferInt <= max )
 			{
 				*pNumeroIngresado = bufferInt;
 				rtn = 0;
 				break;
 			}
-			fflush(stdin);
+
 			reintentos--;
 			printf (mensajeError);
 			printf ("\nTe quedan %d intentos.\n", reintentos);
@@ -205,7 +203,7 @@ int utn_getInt(int* pNumeroIngresado, char* mensaje, char* mensajeError, int min
 
 		if (reintentos == 0)
 		{
-			rtn = 0;
+			rtn = -2;
 		}
 	}
 	return rtn;
@@ -221,14 +219,13 @@ int utn_getIntRange(int *pNumeroIngresado, char *mensaje, char *mensajeError, in
 		{
 			printf(mensaje);
 
-			if (getInt(&bufferInt) && bufferInt >= min && bufferInt <= max)
+			if (getInt (&bufferInt) == 1 && bufferInt >= min && bufferInt <= max)
 			{
 				*pNumeroIngresado = bufferInt;
 				rtn = 0;
 				break;
 			}
 
-			fflush(stdin);
 			printf(mensajeError);
 		}
 	}
@@ -245,14 +242,13 @@ int utn_getIntPositivo (int* pNumeroIngresado, char* mensaje, char* mensajeError
 		{
 			printf (mensaje);
 
-			if (getInt(&bufferInt) && bufferInt > 0)
+			if (getInt(&bufferInt) == 1 && bufferInt > 0)
 			{
 				*pNumeroIngresado = bufferInt;
 				rtn = 0;
 				break;
 			}
 
-			fflush(stdin);
 			printf (mensajeError);
 		}
 	}
@@ -270,14 +266,13 @@ int utn_getIntNegativo(int* pNumeroIngresado, char* mensaje, char* mensajeError)
 		{
 			printf (mensaje);
 
-			if (getInt(&bufferInt) && bufferInt < 0)
+			if (getInt(&bufferInt) == 1 && bufferInt < 0)
 			{
 				*pNumeroIngresado = bufferInt;
 				rtn = 0;
 				break;
 			}
 
-			fflush(stdin);
 			printf (mensajeError);
 		}
 	}
@@ -294,13 +289,13 @@ int utn_getIntAlone (int* pNumeroIngresado, char* mensaje, char* mensajeError)
 		{
 			printf (mensaje);
 
-			if (getInt(&bufferInt))
+			if (getInt(&bufferInt) == 1)
 			{
 				*pNumeroIngresado = bufferInt;
 				rtn = 0;
 				break;
 			}
-			fflush(stdin);
+
 			puts (mensajeError);
 		}
 	}
@@ -319,12 +314,11 @@ int utn_getFloat(float* pNumeroIngresado, char* mensaje, char* mensajeError, flo
 		{
 			printf (mensaje);
 
-			if (getFloat (&bufferFloat) && bufferFloat >= min && bufferFloat <= max)
+			if (getFloat (&bufferFloat) == 1 && bufferFloat >= min && bufferFloat <= max)
 			{
 				break;
 			}
 
-			fflush(stdin);
 			reintentos--;
 			printf (mensajeError);
 			printf ("\n Te quedan %d intentos.\n", reintentos);
@@ -361,7 +355,6 @@ int utn_getFloatPositivo (float* pNumeroIngresado, char* mensaje, char* mensajeE
 				break;
 			}
 
-			fflush(stdin);
 			printf (mensajeError);
 		}
 	}
@@ -385,7 +378,7 @@ int utn_getFloatAlone(float* pNumeroIngresado, char* mensaje, char* mensajeError
 				break;
 			}
 
-			fflush(stdin);
+
 			printf (mensajeError);
 		}
 	}
@@ -404,12 +397,11 @@ int utn_getDouble(double* pNumeroIngresado, char* mensaje, char* mensajeError, d
 		{
 			printf (mensaje);
 
-			if (getDouble (&bufferDouble) && bufferDouble >= min && bufferDouble <= max)
+			if (getDouble (&bufferDouble) == 1 && bufferDouble >= min && bufferDouble <= max)
 			{
 				break;
 			}
 
-			fflush(stdin);
 			reintentos--;
 			printf (mensajeError);
 			printf ("\n Te quedan %d intentos.\n", reintentos);
@@ -439,14 +431,13 @@ int utn_getDoubleAlone(double* pNumeroIngresado, char* mensaje, char* mensajeErr
 		{
 			printf (mensaje);
 
-			if (getDouble (&bufferDouble))
+			if (getDouble (&bufferDouble) == 1)
 			{
 				*pNumeroIngresado = bufferDouble;
 				rtn = 0;
 				break;
 			}
 
-			fflush(stdin);
 			printf (mensajeError);
 		}
 	}
@@ -515,15 +506,12 @@ static int getNombre (char* pNombreIngresado, int len)
 {
 	char buffer[len + 10];
 	int rtn = -1;
-	int a;
+
 	if ( pNombreIngresado != NULL &&
 		 myGets(buffer, sizeof (buffer)) == 1 &&
 		 esNombre(buffer, sizeof (buffer)) == 1 &&
 		 strnlen(buffer,sizeof(buffer) ) < len )
 	{
-		a =  esNombre(buffer, sizeof (buffer));
-		printf ("%d", a);
-
 		strncpy (pNombreIngresado, buffer, len );
 		rtn = 1;
 	}
@@ -569,10 +557,12 @@ static int esNumerica ( char * cadenaPosiblesNumeros)
 	{
 		while (cadenaPosiblesNumeros[i] != '\0' )
 		{
+			if( i==0 && (cadenaPosiblesNumeros[i] == '+' || cadenaPosiblesNumeros[i] == '-') )
+			{
+				i++;
+			}
 			if (cadenaPosiblesNumeros[i] < '0' || cadenaPosiblesNumeros[i] > '9' )
 			{
-				if (cadenaPosiblesNumeros[i] == '-' && i == 0) continue;
-
 				retorno = 0;
 				break ;
 			}
@@ -582,7 +572,7 @@ static int esNumerica ( char * cadenaPosiblesNumeros)
 	return retorno;
 }
 
-static int esFlotante(char *cadenaPosiblesNumeros) // REVISAR PORQUE ENTRAR EN EL -1.
+static int esFlotante(char *cadenaPosiblesNumeros)
 {
 	int i = 0;
 	int flagPunto = 0;
@@ -592,11 +582,9 @@ static int esFlotante(char *cadenaPosiblesNumeros) // REVISAR PORQUE ENTRAR EN E
 	{
 		while (cadenaPosiblesNumeros[i] != '\0')
 		{
-			if (i == 0
-					&& (cadenaPosiblesNumeros[i] == '-'
-							|| cadenaPosiblesNumeros[i] == '+'))
+			if( i==0 && (cadenaPosiblesNumeros[i] == '+' || cadenaPosiblesNumeros[i] == '-') )
 			{
-				continue;
+				i++;
 			}
 			if (cadenaPosiblesNumeros[i] < '0'
 					|| cadenaPosiblesNumeros[i] > '9')
@@ -612,7 +600,6 @@ static int esFlotante(char *cadenaPosiblesNumeros) // REVISAR PORQUE ENTRAR EN E
 			i++;
 		}
 	}
-	printf("%d\n", retorno);
 	return retorno;
 }
 
@@ -667,6 +654,7 @@ static int esDescripcion ( char * cadena, int len)
 static int myGets(char *cadena, int len)
  {
 	int rtn = -1;
+	fflush(stdin);
 	if ( cadena != NULL && len > 0 && fgets(cadena, len, stdin) == cadena)
 	{
 		fflush(stdin);
