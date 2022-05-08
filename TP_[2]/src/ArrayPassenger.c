@@ -80,13 +80,18 @@ Passenger pas_ModificarUno(Passenger miPasajero)
 	do
 	{
 		fflush(stdin);
-		utn_getIntRange (&opcion ,"\nIngrese la opcion a modificar:\n 1 - Nombre\n 2 - Apellido\n 3 - Precio\n 4 - Tipo de Pasajero\n 5 - Codigo de Vuelo\nOpcion: "
-				, "Error. Ingrese una opcion correcta\n\n", 1, 5);
+		utn_getIntRange (&opcion ,"\nIngrese la opcion a modificar:\n "
+									"1 - Nombre\n "
+									"2 - Apellido\n "
+									"3 - Precio\n "
+									"4 - Tipo de Pasajero\n "
+									"5 - Codigo de Vuelo\nOpcion: ",
+									"Error. Ingrese una opcion correcta\n\n", 1, 5);
 
 		switch (opcion)
 		{
 			case 1:
-				if( utn_getNombre(auxiliar.name, "Ingrese el nombre del pasajero: ", "Ingrese un nombre valido\n\n", TEXT_LEN, 3))
+				if( utn_getNombre(auxiliar.name, "Ingrese el nombre del pasajero: ", "Ingrese un nombre valido\n\n", TEXT_LEN, 3) == 0)
 				{
 					puts ("Carga de nombre correcta\n");
 				}
@@ -94,10 +99,10 @@ Passenger pas_ModificarUno(Passenger miPasajero)
 				{
 					puts("No se pudo cargar el nombre");
 				}
-			break;
+				break;
 
 			case 2:
-				if(utn_getNombre(auxiliar.lastName, "Ingrese el apellido del pasajero: ", "Ingrese un apellido valido\n\n", TEXT_LEN, 3))
+				if(utn_getNombre(auxiliar.lastName, "Ingrese el apellido del pasajero: ", "Ingrese un apellido valido\n\n", TEXT_LEN, 3) == 0)
 				{
 					puts ("Carga de apellido correcta\n");
 				}
@@ -105,10 +110,10 @@ Passenger pas_ModificarUno(Passenger miPasajero)
 				{
 					puts("No se pudo cargar el apellido");
 				}
-			break;
+				break;
 
 			case 3:
-				if(utn_getFloatPositivo(&auxiliar.price, "Ingrese el precio del vuelo: ", "Ingrese un precio valido\n\n"))
+				if(utn_getFloatPositivo(&auxiliar.price, "Ingrese el precio del vuelo: ", "Ingrese un precio valido\n\n") == 0)
 				{
 					puts ("Carga de precio correcta\n");
 				}
@@ -116,10 +121,11 @@ Passenger pas_ModificarUno(Passenger miPasajero)
 				{
 					puts("No se pudo cargar el precio");
 				}
-			break;
+				break;
 
 			case 4:
-				if(utn_getIntRange(&auxiliar.typePassenger, "Ingrese el tipo del vuelo (1 = A 2 = B): ", "Ingrese un tipo de vuelo valido\n\n", 1,2))
+				if(utn_getIntRange(&auxiliar.typePassenger, "Ingrese el tipo del vuelo: "
+						"\n\t 1 = Primera Clase\n\t 2 = Business\n\t 3 - Premium Economy\n\t 4 - Economy\nIngrese su opcion: ", "Ingrese un tipo de vuelo valido\n", 1,4) == 0)
 				{
 					puts ("Carga de tipo del vuelo correcta\n");
 				}
@@ -127,10 +133,10 @@ Passenger pas_ModificarUno(Passenger miPasajero)
 				{
 					puts("No se pudo cargar el tipo del vuelo");
 				}
-			break;
+				break;
 
 			case 5:
-				if(utn_getString(auxiliar.flycode, "Ingrese el codigo del vuelo: ", "Ingrese un codigo valido\n\n", CODIGO, 3))
+				if(utn_getString(auxiliar.flycode, "Ingrese el codigo del vuelo: ", "Ingrese un codigo valido\n\n", CODIGO, 3) == 0)
 				{
 					puts ("Carga de codigo del vuelo correcta\n");
 				}
@@ -138,7 +144,7 @@ Passenger pas_ModificarUno(Passenger miPasajero)
 				{
 					puts("No se pudo cargar el codigo del vuelo");
 				}
-			break;
+				break;
 		}
 
 
@@ -163,7 +169,7 @@ int pas_Modificacion(Passenger* list, int len)
 	}
 
 	if (flagAlta) {
-		if( utn_getIntAlone (&idIngresado ,"\nIngrese un ID: ", "Error. Ingrese un ID correcto.\n"))
+		if( utn_getIntAlone (&idIngresado ,"\nIngrese un ID: ", "Error. Ingrese un ID correcto.\n") == 0)
 		{
 			while (findPassengerById(list, len, idIngresado) == -1)
 			{
@@ -184,11 +190,12 @@ int cargaDatosPasajero (Passenger* auxList)
 	int rtn = -1;
 	if (auxList != NULL)
 	{
-		if (utn_getNombre(auxList->name, "Ingrese el nombre del pasajero: ", "Ingrese un nombre valido\n", TEXT_LEN, 3) &&
-			utn_getNombre(auxList->lastName, "Ingrese el apellido del pasajero: ", "Ingrese un apellido valido\n ", TEXT_LEN, 3) &&
-			utn_getFloatPositivo(&auxList->price, "Ingrese el precio del vuelo: ", "Ingrese un precio valido\n ") &&
-			utn_getIntRange(&auxList->typePassenger, "Ingrese el tipo del vuelo (1 = A 2 = B): ", "Ingrese un tipo de vuelo valido (1 = A 2 = B)\n", 1,2) &&
-			utn_getString(auxList->flycode, "Ingrese el codigo del vuelo: ", "Ingrese un codigo valido\n", CODIGO, 3) )
+		if (utn_getNombre(auxList->name, "Ingrese el nombre del pasajero: ", "Ingrese un nombre valido\n", TEXT_LEN, 3) == 0 &&
+			utn_getNombre(auxList->lastName, "Ingrese el apellido del pasajero: ", "Ingrese un apellido valido\n ", TEXT_LEN, 3) == 0 &&
+			utn_getFloatPositivo(&auxList->price, "Ingrese el precio del vuelo: ", "Ingrese un precio valido\n ") == 0 &&
+			utn_getIntRange(&auxList->typePassenger, "Ingrese el tipo del vuelo: "
+					"\n\t 1 = Primera Clase\n\t 2 = Business\n\t 3 - Premium Economy\n\t 4 - Economy\nIngrese su opcion: ", "Ingrese un tipo de vuelo valido\n", 1,4) == 0 &&
+			utn_getString(auxList->flycode, "Ingrese el codigo del vuelo: ", "Ingrese un codigo valido\n", CODIGO, 3) == 0)
 		{
 			auxList->id = ePas_ObtenerID();
 			puts ("Cliente cargado");
@@ -244,7 +251,7 @@ int pas_Baja (Passenger* list, int len)
 
 	if (flagAlta)
 	{
-		if( utn_getIntAlone (&idIngresado ,"\nIngrese un ID: ", "Error. Ingrese un numero.\n"))
+		if( utn_getIntAlone (&idIngresado ,"\nIngrese un ID: ", "Error. Ingrese un numero.\n") == 0)
 		{
 			while (findPassengerById(list, len, idIngresado) == -1)
 			{
@@ -253,7 +260,7 @@ int pas_Baja (Passenger* list, int len)
 			}
 
 			index = findPassengerById(list, len, idIngresado);
-			if (validacionDosCaracteres ("¿Esta seguro de querer borrar el pasajero? (S/N)", 'S', 'N'))
+			if (validacionDosCaracteres ("¿Esta seguro de querer borrar el pasajero? (S/N)", 'S', 'N') == 1)
 			{
 				if (removePassenger(list, len, index) == 0)
 				{
@@ -266,64 +273,121 @@ int pas_Baja (Passenger* list, int len)
 	return rtn;
 }
 
-int sortPassengers(Passenger* list, int len, int order)
- {
+int pas_Informar (Passenger* list, int len)
+{
 	int rtn = -1;
-	int i;
-	int j;
-	Passenger aux;
+	int opcion;
+	char respuesta;
+	int flagAlta = 0;
 
-	/** EJEMPLO DE SORT CON ID DE Gen
-	 MODIFICAR "CRITERIO DE ORDENAMIENTO" PARA OTROS CASOS DE ORDENAMIENTO
-	 CASE -1 -> MENOR A MAYOR (ASCENDENTE)
-	 CASE  1 -> MAYOR A MENOR (DESCENDENTE)
+	if (pas_isStrucEmpty(list, len) == 0)
+	{
+		flagAlta = 1;
+	}
 
-	 UTILIZAR strcmp(...) PARA COMPARAR CADENAS
-	 */
+	if (list != NULL && len > 0 && flagAlta == 1)
+	{
+		do
+		{
+			fflush(stdin);
+			utn_getIntRange (&opcion ,"\nIngrese la opcion que desea informar:\n "
+											"1 - Listado de los pasajeros ordenados alfabéticamente por Apellido y Tipo de pasajero.\n "
+											"2 - Total y promedio de los precios de los pasajes, y cuántos pasajeros superan el precio promedio.\n "
+											"3 - Listado de los pasajeros por Codigo de vuelo y estados de vuelo ACTIVO\n"
+											"Ingrese su opcion: ",
+											"Error. Ingrese una opcion correcta\n\n", 1, 3);
 
-	//SI EXISTE EL ARRAY Y EL LIMITE ES VALIDO
+			switch (opcion)
+			{
+				case 1:
+					utn_getIntRange (&opcion ,"\nIngrese la opcion que desea informar:\n "
+							"1 - Ascendente.\n "
+							"2 - Descendente.\n "
+							"Ingrese su opcion: ",
+							"Error. Ingrese una opcion correcta\n\n", 1, 2);
+					if (sortPassengers(list,  len, opcion) == 0)
+					{
+						printPassenger(list, len);
+					}
+					break;
+
+				case 2:
+					if (pas_CalculosPasaje (list, len) == 0)
+					{
+						rtn = 0;
+					}
+					break;
+
+				case 3:
+					utn_getIntRange (&opcion ,"\nIngrese la opcion que desea informar:\n "
+												"1 - Ascendente.\n "
+												"2 - Descendente.\n "
+												"Ingrese su opcion: ",
+												"Error. Ingrese una opcion correcta\n\n", 1, 2);
+					if (sortPassengers(list,  len, opcion) == 0)
+					{
+						printPassenger(list, len);
+					}
+					break;
+			}
+			respuesta = validacionDosCaracteres ("¿Desea informar otra opcion? (S/N)", 'S', 'N');
+		}
+		while (respuesta);
+	}
+	return rtn;
+}
+
+
+int pas_isStrucEmpty (Passenger* list, int len)
+{
+	int rtn = -1;
 	if (list != NULL && len > 0)
 	{
-		switch (order) {
-		case 1:
-			for (i = 0; i < len - 1; i++) {
-				for (j = i + 1; j < len; j++) {
-					//PREGUNTO POR ESTADO "OCUPADO" DE AMBOS
-					if (list[i].isEmpty == OCUPADO && list[j].isEmpty == OCUPADO) {
-						//CRITERIO DE ORDENAMIENTO
-						if (list[i].id > list[j].id) {
-							//INTERCAMBIO POSICIONES EN ARRAY
-							aux = list[i];
-							list[i] = list[j];
-							list[j] = aux;
-						}
-					}
-				}
+		for (int i = 0; i < len; i++)
+		{
+			if (list[i].isEmpty == OCUPADO)
+			{
+				rtn = 0;
 			}
-			rtn = 1;
-			break;
-		case 0:
-			for (i = 0; i < len - 1; i++) {
-				for (j = i + 1; j < len; j++) {
-					//PREGUNTO POR ESTADO "OCUPADO" DE AMBOS
-					if (list[i].isEmpty == OCUPADO && list[j].isEmpty == OCUPADO) {
-						//CRITERIO DE ORDENAMIENTO
-						if (list[i].id < list[j].id) {
-							//INTERCAMBIO POSICIONES EN ARRAY
-							aux = list[i];
-							list[i] = list[j];
-							list[j] = aux;
-						}
-					}
-				}
-			}
-			rtn = 0;
-			break;
-		default:
-			//CRITERIO DE ORDENAMIENTO MAL INGRESADO
-			rtn = 1;
-			break;
 		}
+	}
+	return rtn;
+}
+
+int pas_CalculosPasaje (Passenger* list, int len)
+{
+	int rtn = -1;
+	float totalPrecio = 0;
+	float promedioPasaje;
+	int cantidadPasaje = 0;
+	int cantidadMayorQuePromedio = 0;
+
+	if (list != NULL && len > 0)
+	{
+		for (int i = 0; i < len; i++)
+		{
+			if (list[i].isEmpty == OCUPADO)
+			{
+				cantidadPasaje++;
+				totalPrecio += list[i].price;
+				rtn = 0;
+			}
+		}
+
+		promedioPasaje = totalPrecio / cantidadPasaje;
+
+		for (int i = 0; i < len; i++)
+		{
+			if (list[i].isEmpty == OCUPADO && list[i].price > promedioPasaje)
+			{
+				cantidadMayorQuePromedio++;
+			}
+		}
+
+		printf ("El total en pasajes es de: $%.4f.\n"
+						"El promedio de pasajes es de: $%.4f.\n"
+						"La cantidad de pasajes que superan el promedio es: %d\n", totalPrecio, promedioPasaje, cantidadMayorQuePromedio);
+
 	}
 	return rtn;
 }
@@ -331,20 +395,25 @@ int sortPassengers(Passenger* list, int len, int order)
 int printPassenger(Passenger* list, int length)
 {
 	int rtn = -1;
+	int flagPrimerPasajero = 0;
 
 	if (list != NULL && length > 0)
 	{
-		puts("\n\t> LISTADO PASAJEROS");
-		printf("ID\tNOMBRE\tAPELLIDO\tPRECIO\tCODIGO VUELO\tTIPO PASAJERO\n"); //AGREGAR TITULOS DE COLUMNA (QUITAR DE VER QUE NO ES NECESARIO)
 		for (int i = 0; i < length; i++)
 		{
 			if (list[i].isEmpty == OCUPADO)
 			{
+				if (flagPrimerPasajero == 0)
+				{
+					flagPrimerPasajero = 1;
+					puts("\n\t> LISTADO PASAJEROS");
+					printf("%-6s %-52s %-52s %-9s %-13s %-s\n", "ID", "NOMBRE", "APELLIDO", "PRECIO", "CODIGO VUELO", "TIPO PASAJERO");
+				}
+
 				pas_printOne (list, i);
 				rtn = 0;
 			}
 		}
-
 	}
 
 	return rtn;
@@ -352,74 +421,181 @@ int printPassenger(Passenger* list, int length)
 
 void pas_printOne (Passenger* list, int index)
 {
-	printf("%d\t", list[index].id);
-	printf("%s\t", list[index].name);
-	printf("%s\t", list[index].lastName);
-	printf("%.2f\t", list[index].price);
-	printf("%s\t", list[index].flycode);
-	printf("%d\t", list[index].typePassenger);
+	char typePassenger[TEXT_LEN];
+	switch (list[index].typePassenger)
+	{
+		case 1:
+			strncpy(typePassenger, "Primera Clase", TEXT_LEN);
+			break;
+		case 2:
+			strncpy(typePassenger, "Business", TEXT_LEN);
+			break;
+		case 3:
+			strncpy(typePassenger, "Premium Economy", TEXT_LEN);
+			break;
+		case 4:
+			strncpy(typePassenger, "Economy", TEXT_LEN);
+			break;
+
+	}
+	printf ("%-6d %-52s %-52s %-9.2f %-13s %-10s\n",
+			list[index].id, list[index].name, list[index].lastName, list[index].price, list[index].flycode, typePassenger);
 }
+
+int sortPassengers(Passenger* list, int len, int order) //Apellido y tipo de pasajero
+{
+	int rtn = -1;
+	int i;
+	int j;
+	Passenger auxPasajeros;
+
+	if (list != NULL && len > 0)
+	{
+		switch (order) {
+		case 1:
+			for (i = 1; i < len; i++)
+			{
+				auxPasajeros = list[i];
+				j = i - 1;
+				while ( (j >= 0) &&
+						( compararCadenas (auxPasajeros.lastName, list[j].lastName) == 1  ||
+						 (compararCadenas (auxPasajeros.lastName, list[j].lastName) == 3 && auxPasajeros.typePassenger > list[j].typePassenger) ) )
+				{
+					list[j + 1] = list[j];
+					j--;
+				}
+				list[j + 1] = auxPasajeros;
+			}
+
+			for (i = 1; i < len; i++)
+			{
+				auxPasajeros = list[i];
+				j = i - 1;
+				while ( (j >= 0) &&
+						( compararCadenas (auxPasajeros.lastName, list[j].lastName) == 2  ||
+						( compararCadenas (auxPasajeros.lastName, list[j].lastName) == 3 && auxPasajeros.typePassenger < list[j].typePassenger) ) )
+				{
+					list[j + 1] = list[j];
+					j--;
+				}
+				list[j + 1] = auxPasajeros;
+			}
+
+			rtn = 0;
+			break;
+		case 2:
+			for (i = 1; i < len; i++)
+			{
+				auxPasajeros = list[i];
+				j = i - 1;
+				while ((j >= 0) && (strcmp(auxPasajeros.lastName, list[j].lastName) > 0 ))
+				{
+					list[j + 1] = list[j];
+					j--;
+				}
+				list[j + 1] = auxPasajeros;
+			}
+
+			for (i = 1; i < len; i++)
+			{
+				auxPasajeros = list[i];
+				j = i - 1;
+				while ( (j >= 0) && (strcmp(auxPasajeros.lastName, list[j].lastName) < 0 ) && (auxPasajeros.typePassenger > list[j].typePassenger) )
+				{
+					list[j + 1] = list[j];
+					j--;
+				}
+				list[j + 1] = auxPasajeros;
+			}
+
+			rtn = 0;
+			break;
+		}
+	}
+	return rtn;
+}
+
 
 int sortPassengersByCode(Passenger* list, int len, int order)
 {
 	int rtn = -1;
 	int i;
 	int j;
-	Passenger aux;
+	Passenger auxPasajeros;
 
-	/** EJEMPLO DE SORT CON ID DE Gen
-	 MODIFICAR "CRITERIO DE ORDENAMIENTO" PARA OTROS CASOS DE ORDENAMIENTO
-	 CASE -1 -> MENOR A MAYOR (ASCENDENTE)
-	 CASE  1 -> MAYOR A MENOR (DESCENDENTE)
-
-	 UTILIZAR strcmp(...) PARA COMPARAR CADENAS
-	 */
-
-	//SI EXISTE EL ARRAY Y EL LIMITE ES VALIDO
 	if (list != NULL && len > 0)
 	{
 		switch (order) {
 		case 1:
-			for (i = 0; i < len - 1; i++) {
-				for (j = i + 1; j < len; j++) {
-					//PREGUNTO POR ESTADO "OCUPADO" DE AMBOS
-					if (list[i].isEmpty == OCUPADO && list[j].isEmpty == OCUPADO) {
-						//CRITERIO DE ORDENAMIENTO
-						if (list[i].id > list[j].id) {
-							//INTERCAMBIO POSICIONES EN ARRAY
-							aux = list[i];
-							list[i] = list[j];
-							list[j] = aux;
-						}
-					}
+			for (i = 1; i < len; i++)
+			{
+				auxPasajeros = list[i];
+				j = i - 1;
+				while ( (j >= 0) && (strcmp(auxPasajeros.flycode, list[j].flycode) < 0 ) )
+				{
+					list[j + 1] = list[j];
+					j--;
 				}
-			}
-			rtn = 1;
-			break;
-		case 0:
-			for (i = 0; i < len - 1; i++) {
-				for (j = i + 1; j < len; j++) {
-					//PREGUNTO POR ESTADO "OCUPADO" DE AMBOS
-					if (list[i].isEmpty == OCUPADO && list[j].isEmpty == OCUPADO) {
-						//CRITERIO DE ORDENAMIENTO
-						if (list[i].id < list[j].id) {
-							//INTERCAMBIO POSICIONES EN ARRAY
-							aux = list[i];
-							list[i] = list[j];
-							list[j] = aux;
-						}
-					}
-				}
+				list[j + 1] = auxPasajeros;
 			}
 			rtn = 0;
 			break;
-		default:
-			//CRITERIO DE ORDENAMIENTO MAL INGRESADO
-			rtn = 1;
+		case 2:
+			for (i = 1; i < len; i++)
+			{
+				auxPasajeros = list[i];
+				j = i - 1;
+				while ((j >= 0) && (strcmp(auxPasajeros.flycode, list[j].flycode) > 0 ))
+				{
+					list[j + 1] = list[j];
+					j--;
+				}
+				list[j + 1] = auxPasajeros;
+			}
+			rtn = 0;
 			break;
 		}
 	}
 	return rtn;
+}
+
+int compararCadenas (char* cadenaUno, char* cadenaDos)
+{
+	int rtn = -1;
+	int comparacion;
+	char auxCadenaUno [TEXT_LEN];
+	char auxCadenaDos [TEXT_LEN];
+
+	strcpy (auxCadenaUno,cadenaUno);
+	strcpy (auxCadenaDos,cadenaDos);
+	if (cadenaUno != NULL && cadenaDos != NULL)
+	{
+		toLowerCadena (auxCadenaUno);
+		toLowerCadena (auxCadenaDos);
+		comparacion = strcmp (auxCadenaUno,auxCadenaDos);
+
+		if (comparacion > 0)
+		{
+			rtn = 1;
+		}
+		else if (comparacion < 0)
+		{
+			rtn = 2;
+		}
+		else
+		{
+			rtn = 3;
+		}
+	}
+	return rtn;
+}
+
+void toLowerCadena (char* cadena)
+{
+	for(int i = 0; cadena[i]; i++)
+	{
+		cadena[i] = tolower(cadena[i]);
+	}
 }
 
 void menu (void)
@@ -427,8 +603,7 @@ void menu (void)
 	puts ("1. Alta de pasajero.");
 	puts ("2. Modificar pasajero ID.");
 	puts ("3. Baja de pasajero");
-	puts ("4. Ordenar pasajeros por apellido y tipo de pasajero.");
-	puts ("5. Ordenar pasajeros por codigo de vuelo");
-	puts ("6. Imprimir pasajeros");
-	puts ("7. Salir.");
+	puts ("4. Informar.");
+	puts ("5. Alta forzada");
+	puts ("6. Salir.");
 }

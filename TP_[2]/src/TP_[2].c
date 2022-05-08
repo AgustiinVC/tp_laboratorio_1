@@ -68,25 +68,11 @@ int main(void) {
 				}
 				break;
 
-			case 4: //Ordenar por apellido y tipo de pasajero
+			case 4:  // Informar
+				pas_Informar (miPasajero, CANT_PASAJEROS);
 				break;
 
-			case 5: //Ordenar por codigo y estado de vuelo
-				break;
-
-			case 6: // Imprimir pasajeros
-				if (printPassenger(miPasajero, CANT_PASAJEROS) == 0)
-				{
-					puts ("Carga Realizada");
-				}
-				else
-				{
-					puts ("Lista de pasajeros vacia");
-				}
-				break;
-
-			case 7: //Carga forzada
-
+			case 5: //Alta forzada
 				break;
 
 			default:
@@ -94,7 +80,7 @@ int main(void) {
 
 		}
 	}
-	while (opcion != 8);
+	while (opcion != 6);
 
 	puts ("Salida");
 

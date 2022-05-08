@@ -26,6 +26,7 @@ struct
 	float price;
 	char flycode[CODIGO];
 	int typePassenger;
+	int statusFlight;
 	int isEmpty;
 
 }typedef Passenger;
@@ -39,10 +40,15 @@ int cargaDatosPasajero (Passenger* auxList);
 int findPassengerById(Passenger* list, int len,int id);
 int removePassenger(Passenger* list, int len, int id);
 int pas_Baja (Passenger* list, int len);
-int sortPassengers(Passenger* list, int len, int order);
+int pas_Informar (Passenger* list, int len);
+int pas_isStrucEmpty (Passenger* list, int len);
+int pas_CalculosPasaje (Passenger* list, int len);
 int printPassenger(Passenger* list, int length);
 void pas_printOne (Passenger* list, int index);
+int sortPassengers(Passenger* list, int len, int order);
 int sortPassengersByCode(Passenger* list, int len, int order);
+int compararCadenas (char* cadenaUno, char* cadenaDos);
+void toLowerCadena (char* cadena);
 void menu (void);
 
 

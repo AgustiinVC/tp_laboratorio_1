@@ -86,7 +86,7 @@ int utn_getString(char* charIngresado, char* mensaje, char* mensajeError, int le
 			if (getString (buffer, sizeof(buffer)) == 1 && strnlen(buffer, sizeof(buffer)) < len)
 			{
 				strncpy(charIngresado , buffer, len );
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 			printf (mensajeError);
@@ -116,7 +116,7 @@ int utn_getNombre(char* charIngresado, char* mensaje, char* mensajeError, int le
 			if (getNombre (buffer, sizeof(buffer)) == 1 && strnlen(buffer, sizeof(buffer)) < len)
 			{
 				strncpy(charIngresado , buffer, len );
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 			printf (mensajeError);
@@ -140,7 +140,7 @@ int utn_getDescripcion (char* charIngresado, char* mensaje, char* mensajeError, 
 			if (getDescripcion (buffer, sizeof(buffer)) == 1 && strnlen(buffer, sizeof(buffer)) < len)
 			{
 				strncpy (charIngresado, buffer, len );
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 			printf (mensajeError);
@@ -164,7 +164,7 @@ int utn_getDNI(char* pNumeroIngresado, char* mensaje, char* mensajeError, int le
 			if ( getDNI (bufferDNI, sizeof(bufferDNI)) && strnlen(bufferDNI, sizeof(bufferDNI)) < len)
 			{
 				strncpy (pNumeroIngresado, bufferDNI, len );
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 
@@ -194,7 +194,7 @@ int utn_getInt(int* pNumeroIngresado, char* mensaje, char* mensajeError, int min
 			if ( getInt (&bufferInt) && bufferInt >= min &&bufferInt <= max )
 			{
 				*pNumeroIngresado = bufferInt;
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 			fflush(stdin);
@@ -224,7 +224,7 @@ int utn_getIntRange(int *pNumeroIngresado, char *mensaje, char *mensajeError, in
 			if (getInt(&bufferInt) && bufferInt >= min && bufferInt <= max)
 			{
 				*pNumeroIngresado = bufferInt;
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 
@@ -248,7 +248,7 @@ int utn_getIntPositivo (int* pNumeroIngresado, char* mensaje, char* mensajeError
 			if (getInt(&bufferInt) && bufferInt > 0)
 			{
 				*pNumeroIngresado = bufferInt;
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 
@@ -273,7 +273,7 @@ int utn_getIntNegativo(int* pNumeroIngresado, char* mensaje, char* mensajeError)
 			if (getInt(&bufferInt) && bufferInt < 0)
 			{
 				*pNumeroIngresado = bufferInt;
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 
@@ -297,7 +297,7 @@ int utn_getIntAlone (int* pNumeroIngresado, char* mensaje, char* mensajeError)
 			if (getInt(&bufferInt))
 			{
 				*pNumeroIngresado = bufferInt;
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 			fflush(stdin);
@@ -332,12 +332,12 @@ int utn_getFloat(float* pNumeroIngresado, char* mensaje, char* mensajeError, flo
 
 		if (reintentos == 0)
 		{
-			rtn = 0;
+			rtn = -2;
 		}
 		else
 		{
 			*pNumeroIngresado = bufferFloat;
-			rtn = 1;
+			rtn = 0;
 		}
 	}
 	return rtn;
@@ -347,17 +347,17 @@ int utn_getFloat(float* pNumeroIngresado, char* mensaje, char* mensajeError, flo
 int utn_getFloatPositivo (float* pNumeroIngresado, char* mensaje, char* mensajeError)
 {
 	float bufferFloat;
-	int rtn = 0;
+	int rtn = -1;
 	if (mensaje != NULL && mensajeError != NULL)
 	{
 		while (1)
 		{
 			printf (mensaje);
 
-			if (getFloat(&bufferFloat) && bufferFloat > 0)
+			if (getFloat(&bufferFloat) == 1 && bufferFloat > 0)
 			{
 				*pNumeroIngresado = bufferFloat;
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 
@@ -378,10 +378,10 @@ int utn_getFloatAlone(float* pNumeroIngresado, char* mensaje, char* mensajeError
 		{
 			printf (mensaje);
 
-			if (getFloat (&bufferFloat))
+			if (getFloat (&bufferFloat) == 1)
 			{
 				*pNumeroIngresado = bufferFloat;
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 
@@ -417,12 +417,12 @@ int utn_getDouble(double* pNumeroIngresado, char* mensaje, char* mensajeError, d
 
 		if (reintentos == 0)
 		{
-			rtn = 0;
+			rtn = -2;
 		}
 		else
 		{
 			*pNumeroIngresado = bufferDouble;
-			rtn = 1;
+			rtn = 0;
 		}
 	}
 	return rtn;
@@ -442,7 +442,7 @@ int utn_getDoubleAlone(double* pNumeroIngresado, char* mensaje, char* mensajeErr
 			if (getDouble (&bufferDouble))
 			{
 				*pNumeroIngresado = bufferDouble;
-				rtn = 1;
+				rtn = 0;
 				break;
 			}
 
@@ -582,31 +582,37 @@ static int esNumerica ( char * cadenaPosiblesNumeros)
 	return retorno;
 }
 
-static int esFlotante ( char * cadenaPosiblesNumeros)
+static int esFlotante(char *cadenaPosiblesNumeros) // REVISAR PORQUE ENTRAR EN EL -1.
 {
 	int i = 0;
 	int flagPunto = 0;
 	int retorno = 1;
-	if (cadenaPosiblesNumeros != NULL && strlen (cadenaPosiblesNumeros) > 0)
+
+	if (cadenaPosiblesNumeros != NULL && strlen(cadenaPosiblesNumeros) > 0)
 	{
-		while (cadenaPosiblesNumeros[i] != '\0' )
+		while (cadenaPosiblesNumeros[i] != '\0')
 		{
-			if (cadenaPosiblesNumeros[i] < '0' || cadenaPosiblesNumeros[i] > '9')
+			if (i == 0
+					&& (cadenaPosiblesNumeros[i] == '-'
+							|| cadenaPosiblesNumeros[i] == '+'))
 			{
-				if (cadenaPosiblesNumeros[i] == '-' && i == 0) continue;
-
-				if ( (cadenaPosiblesNumeros[i] == '.') && !flagPunto)
+				continue;
+			}
+			if (cadenaPosiblesNumeros[i] < '0'
+					|| cadenaPosiblesNumeros[i] > '9')
+			{
+				if (cadenaPosiblesNumeros[i] == '.' && flagPunto == 0)
 				{
-					flagPunto = 1;
-					continue;
+					flagPunto++;
+				} else {
+					retorno = 0;
+					break;
 				}
-
-				retorno = -1;
-				break ;
 			}
 			i++;
 		}
 	}
+	printf("%d\n", retorno);
 	return retorno;
 }
 
