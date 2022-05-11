@@ -618,11 +618,13 @@ Passenger pas_UnPasajeroForzado (int indiceLibre, char* name, char* lastname, fl
 
 
 void menu (void)
-{
+{	puts ("~~~~~~~~~~~~~~~~~~~~~~~~~");
+	puts ("--Trabajo Practio N°2--\n");
 	puts ("1. Alta de pasajero.");
 	puts ("2. Modificar pasajero ID.");
 	puts ("3. Baja de pasajero");
 	puts ("4. Informar.");
 	puts ("5. Alta forzada");
 	puts ("6. Salir.");
+	puts ("~~~~~~~~~~~~~~~~~~~~~~~~~");
 }

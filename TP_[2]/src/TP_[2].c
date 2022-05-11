@@ -36,49 +36,56 @@ int main(void) {
 			case 1: //Alta
 				if (union_altaPassenger (miPasajero, CANT_PASAJEROS, miVuelo, CANT_PASAJEROS) == 0)
 				{
-					puts ("Carga con exito.");
+					puts ("\n~~ALTA de pasajero realizada~~\n");
 				}
 				else
 				{
-					puts("Error en la carga");
+					puts("\n~~No se pudo realizar el ALTA~~\n");
 				}
 				break;
 
 			case 2: //Modificar por ID
 				if (union_Modificacion (miPasajero, CANT_PASAJEROS, miVuelo, CANT_PASAJEROS) == 0)
 				{
-					puts("\n * MODIFICACION DE Pasajero Exitosa");
+					puts ("\n~~MODIFICACION de pasajero realizada~~\n");
 				}
 				else
 				{
-					puts("\n * MODIFICACION DE Pasajero Cancelada");
+					puts ("\n~~No se pudo realizar la MODIFICACION del pasajero~~\n");
 				}
 				break;
 
 			case 3: //Baja de Pasajero
 				if (union_Baja(miPasajero, CANT_PASAJEROS, miVuelo, CANT_PASAJEROS) == 0)
 				{
-					puts("\n * BAJA DE Pasajero Exitosa");
+					puts ("\n~~BAJA de pasajero realizada~~\n");
 				}
 				else
 				{
-					puts("\n * BAJA DE Pasajero Cancelada");
+					puts ("\n~~No se pude realizar la BAJA del pasajero~~\n");
 				}
 				break;
 
 			case 4:  // Informar
-				union_Informar (miPasajero, CANT_PASAJEROS, miVuelo, CANT_PASAJEROS);
+				if (union_Informar (miPasajero, CANT_PASAJEROS, miVuelo, CANT_PASAJEROS) == 0)
+				{
+					puts ("\n~~INFORME realizado con exito~~\n");
+				}
+				else
+				{
+					puts ("\n~~No se pude realizar el INFORME.~~\n");
+				}
 				break;
 
 			case 5: //Alta forzada
 				if (altaForzadaPasajeros (miPasajero, CANT_PASAJEROS) == 0 &&
 					vue_altaForzada(miVuelo, CANT_PASAJEROS) == 0 )
 				{
-					puts ("\nAlta realizada.");
+					puts ("\n~~ALTA FORZADA realizada~~\n");
 				}
 				else
 				{
-					puts ("Alta forzada ya cargada.");
+					puts ("\n~~ALTA FORZADA ya cargada~~\n");
 				}
 				break;
 		}

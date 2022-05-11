@@ -47,12 +47,12 @@ int union_Baja (Passenger* aPassenger, int pas_len, Vuelo* aVuelo, int vuelo_len
 
 	if (flagAlta)
 	{
-		if( utn_getIntAlone (&idIngresado ,"\nIngrese un ID: ", "Error. Ingrese un numero.\n") == 0)
+		if( utn_getIntAlone (&idIngresado ,"\nIngrese un ID: ", "Error. Ingrese un numero.") == 0)
 		{
 			while (findPassengerById(aPassenger, pas_len, idIngresado) == -1)
 			{
-				puts("NO EXISTE ID.");
-				utn_getIntAlone (&idIngresado ,"\nIngrese un ID: ", "Error. Ingrese un numero.\n");
+				puts("NO EXISTE ID\n");
+				utn_getIntAlone (&idIngresado ,"Ingrese un ID: ", "Error. Ingrese un numero.\n");
 			}
 
 			index = findPassengerById(aPassenger, pas_len, idIngresado);
@@ -123,7 +123,7 @@ int union_printStruct(Passenger* aPassenger, int pas_len, Vuelo* aVuelo, int vue
 				if (flagPrimerPasajero == 0)
 				{
 					flagPrimerPasajero = 1;
-					puts("\n\t\t\t\t> LISTADO PASAJEROS\n"
+					puts("\n\t\t\t\t\t\t\t\t> LISTADO PASAJEROS\n"
 						"--------------------------------------------------------------------------------------"
 						"------------------------------------------------------------------------------------------");
 					printf("%-6s %-52s %-52s %-12s %-21s %-15s %-s\n", "ID", "NOMBRE", "APELLIDO", "PRECIO", "  TIPO PASAJERO" ,"CODIGO VUELO", "ESTADO VUELO");
@@ -154,7 +154,9 @@ int union_printActiveStruct(Passenger* aPassenger, int pas_len, Vuelo* aVuelo, i
 				if (flagPrimerPasajero == 0)
 				{
 					flagPrimerPasajero = 1;
-					puts("\n\t\t\t\t> LISTADO PASAJEROS");
+					puts("\n\t\t\t\t\t\t\t\t> LISTADO PASAJEROS <\n"
+											"--------------------------------------------------------------------------------------"
+											"------------------------------------------------------------------------------------------");
 					printf("%-6s %-52s %-52s %-12s %-21s %-15s %-s\n", "ID", "NOMBRE", "APELLIDO", "PRECIO", "  TIPO PASAJERO" ,"CODIGO VUELO", "ESTADO VUELO");
 				}
 
@@ -197,16 +199,16 @@ int union_Informar (Passenger* aPassenger, int pas_len, Vuelo* aVuelo, int vuelo
 			utn_getIntRange (&opcion ,"\nIngrese la opcion que desea informar:\n "
 											"1 - Listado de los pasajeros ordenados alfabéticamente por Apellido y Tipo de pasajero.\n "
 											"2 - Total y promedio de los precios de los pasajes, y cuántos pasajeros superan el precio promedio.\n "
-											"3 - Listado de los pasajeros por Codigo de vuelo y estados de vuelo ACTIVO\n"
+											"3 - Listado de los pasajeros por Codigo de vuelo y estados de vuelo ACTIVO\n\n"
 											"Ingrese su opcion: ",
 											"Error. Ingrese una opcion correcta\n\n", 1, 3);
 
 			switch (opcion)
 			{
 				case 1:
-					utn_getIntRange (&opcion ,"\nIngrese la opcion que desea informar:\n "
-							"1 - Ascendente.\n "
-							"2 - Descendente.\n "
+					utn_getIntRange (&opcion ,"\nIngrese el orden que desea informar:\n "
+							"1 - Ascendente. (A a Z y Business a Primera Clase)\n "
+							"2 - Descendente (Z a A y Primera Clase a Business)\n\n "
 							"Ingrese su opcion: ",
 							"Error. Ingrese una opcion correcta\n\n", 1, 2);
 					if (sortPassengers(aPassenger,  pas_len, opcion) == 0)
@@ -218,14 +220,14 @@ int union_Informar (Passenger* aPassenger, int pas_len, Vuelo* aVuelo, int vuelo
 				case 2:
 					if (pas_CalculosPasaje (aPassenger, pas_len) == 0)
 					{
-						puts ("Calculo realizado.");
+						puts ("~~Calculo realizado~~\n");
 					}
 					break;
 
 				case 3:
-					utn_getIntRange (&opcion ,"\nIngrese la opcion que desea informar:\n "
-												"1 - Ascendente.\n "
-												"2 - Descendente.\n "
+					utn_getIntRange (&opcion ,"\nIngrese el orden que desea informar:\n "
+												"1 - Ascendente (A a Z y Vuelos ACTIVOS)\n "
+												"2 - Descendente (A a Z y Vuelos ACTIVOS)\n "
 												"Ingrese su opcion: ",
 												"Error. Ingrese una opcion correcta\n\n", 1, 2);
 					if (sortPassengersByCode(aPassenger, pas_len, opcion) == 0)
@@ -234,10 +236,11 @@ int union_Informar (Passenger* aPassenger, int pas_len, Vuelo* aVuelo, int vuelo
 					}
 					break;
 			}
-			respuesta = validacionDosCaracteres ("¿Desea informar otra opcion? (S/N)", 'S', 'N');
+			respuesta = validacionDosCaracteres ("\n¿Desea informar otra opcion? (S/N)", 'S', 'N');
 		}
 		while (respuesta);
 	}
+	puts ("");
 	return rtn;
 }
 
