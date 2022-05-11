@@ -29,14 +29,13 @@ struct
 	char name[TEXT_LEN];
 	char lastName[TEXT_LEN];
 	float price;
-	char flycode[CODIGO];
+	char FK_flycode[CODIGO];
 	int typePassenger;
-	int statusFlight;
 	int isEmpty;
 
 }typedef Passenger;
 
-int initPassengers(Passenger* list, int len);
+int pas_initArray(Passenger* list, int len);
 int pas_indexEmpty (Passenger* list, int len);
 int addPassenger(Passenger* list, int len, int id, char name[],char lastName[],float price,int typePassenger, char flycode[]);
 Passenger pas_ModificarUno(Passenger miPasajero);
@@ -49,12 +48,10 @@ int pas_Informar (Passenger* list, int len);
 int pas_isStrucEmpty (Passenger* list, int len);
 int pas_CalculosPasaje (Passenger* list, int len);
 int printPassenger(Passenger* list, int length);
-void pas_printOne (Passenger* list, int index);
+void pas_printOne (Passenger* list);
 int printActivePassenger(Passenger* list, int length);
 int sortPassengers(Passenger* list, int len, int order);
 int sortPassengersByCode(Passenger* list, int len, int order);
-int compararCadenas (char* cadenaUno, char* cadenaDos);
-void toLowerCadena (char* cadena);
 int altaForzadaPasajeros (Passenger* list, int len);
 Passenger pas_UnPasajeroForzado (int indiceLibre, char* name, char* lastname, float price,char* codeFlight,int typePassenger);
 void menu (void);

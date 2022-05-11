@@ -22,7 +22,7 @@ static int ePas_AltaForzada (void)
 	return flagAltaForzada++;
 }
 
-int initPassengers(Passenger* list, int len)
+int pas_initArray(Passenger* list, int len)
 {
 	int rtn = -1;
 	int i;
@@ -69,9 +69,8 @@ int addPassenger(Passenger* list, int len, int id, char name[],char lastName[],f
 			strncpy (list[indiceLibre].lastName, lastName, TEXT_LEN);
 			list[indiceLibre].price = price;
 			list[indiceLibre].typePassenger = typePassenger;
-			strncpy (list[indiceLibre].flycode, flycode, CODIGO);
+			strncpy (list[indiceLibre].FK_flycode, flycode, CODIGO);
 			list[indiceLibre].id =  id;
-			list[indiceLibre].statusFlight =  ACTIVO;
 			list[indiceLibre].isEmpty = OCUPADO;
 
 			rtn = 0;
@@ -144,7 +143,7 @@ Passenger pas_ModificarUno(Passenger miPasajero)
 				break;
 
 			case 5:
-				if(utn_getString(auxiliar.flycode, "Ingrese el codigo del vuelo: ", "Ingrese un codigo valido\n\n", CODIGO, 3) == 0)
+				if(utn_getString(auxiliar.FK_flycode, "Ingrese el codigo del vuelo: ", "Ingrese un codigo valido\n\n", CODIGO, 3) == 0)
 				{
 					puts ("Carga de codigo del vuelo correcta\n");
 				}
@@ -203,11 +202,9 @@ int cargaDatosPasajero (Passenger* auxList)
 			utn_getFloatPositivo(&auxList->price, "Ingrese el precio del vuelo: ", "Ingrese un precio valido\n ") == 0 &&
 			utn_getIntRange(&auxList->typePassenger, "Ingrese el tipo del vuelo: "
 					"\n\t 1 = Primera Clase\n\t 2 = Business\n\t 3 - Premium Economy\n\t 4 - Economy\nIngrese su opcion: ", "Ingrese un tipo de vuelo valido\n", 1,4) == 0 &&
-			utn_getString(auxList->flycode, "Ingrese el codigo del vuelo: ", "Ingrese un codigo valido\n", CODIGO, 3) == 0)
+			utn_getString(auxList->FK_flycode, "Ingrese el codigo del vuelo: ", "Ingrese un codigo valido\n", CODIGO, 3) == 0)
 		{
 			auxList->id = ePas_ObtenerID();
-			auxList->statusFlight = ACTIVO;
-			puts ("Cliente cargado");
 			rtn = 0;
 		}
 	}
@@ -392,10 +389,11 @@ int pas_CalculosPasaje (Passenger* list, int len)
 				cantidadMayorQuePromedio++;
 			}
 		}
-
-		printf ("El total en pasajes es de: $%.4f.\n"
-						"El promedio de pasajes es de: $%.4f.\n"
-						"La cantidad de pasajes que superan el promedio es: %d\n", totalPrecio, promedioPasaje, cantidadMayorQuePromedio);
+		printf ("---------------------------\n"
+				"El total en pasajes es de: $%.4f.\n"
+				"El promedio de pasajes es de: $%.4f.\n"
+				"La cantidad de pasajes que superan el promedio es: %d\n"
+				"---------------------------\n", totalPrecio, promedioPasaje, cantidadMayorQuePromedio);
 
 	}
 	return rtn;
@@ -415,11 +413,12 @@ int printPassenger(Passenger* list, int length)
 				if (flagPrimerPasajero == 0)
 				{
 					flagPrimerPasajero = 1;
-					puts("\n\t\t\t\t> LISTADO PASAJEROS");
+					puts("\n\t\t\t\t> LISTADO PASAJEROS\n"
+							"----------------------------------------------------------------------------------------------------------------------------");
 					printf("%-6s %-52s %-52s %-9s %-13s %-s %-s\n", "ID", "NOMBRE", "APELLIDO", "PRECIO", "CODIGO VUELO", "TIPO PASAJERO", "ESTADO VUELO");
 				}
 
-				pas_printOne (list, i);
+				pas_printOne (&list[i]);
 				rtn = 0;
 			}
 		}
@@ -437,7 +436,7 @@ int printActivePassenger(Passenger* list, int length)
 	{
 		for (int i = 0; i < length; i++)
 		{
-			if (list[i].isEmpty == OCUPADO && list[i].statusFlight == ACTIVO)
+			if (list[i].isEmpty == OCUPADO)
 			{
 				if (flagPrimerPasajero == 0)
 				{
@@ -446,7 +445,7 @@ int printActivePassenger(Passenger* list, int length)
 					printf("%-6s %-52s %-52s %-15s %-13s %-20s %-30s\n", "ID", "NOMBRE", "APELLIDO", "PRECIO", "CODIGO VUELO", "TIPO PASAJERO", "ESTADO VUELO");
 				}
 
-				pas_printOne (list, i);
+				pas_printOne (&list[i]);
 				rtn = 0;
 			}
 		}
@@ -455,11 +454,10 @@ int printActivePassenger(Passenger* list, int length)
 	return rtn;
 }
 
-void pas_printOne (Passenger* list, int index)
+void pas_printOne (Passenger* list)
 {
 	char typePassenger[TEXT_LEN];
-	char flightStatus[TEXT_LEN];
-	switch (list[index].typePassenger)
+	switch (list->typePassenger)
 	{
 		case 1:
 			strncpy(typePassenger, "Primera Clase", TEXT_LEN);
@@ -475,21 +473,8 @@ void pas_printOne (Passenger* list, int index)
 			break;
 
 	}
-	switch (list[index].statusFlight)
-		{
-			case 1:
-				strncpy(flightStatus, "Activo", TEXT_LEN);
-				break;
-			case 2:
-				strncpy(flightStatus, "Demorado", TEXT_LEN);
-				break;
-			case 3:
-				strncpy(flightStatus, "Cancelado", TEXT_LEN);
-				break;
-		}
-
-	printf ("%-6d %-52s %-52s %-15.2f %-13s %-20s %-10s\n",
-			list[index].id, list[index].name, list[index].lastName, list[index].price, list[index].flycode, typePassenger, flightStatus);
+		printf ("%-6d %-52s %-52s %-15.2f %-13s %-20s\n",
+				list->id, list->name, list->lastName, list->price, list->FK_flycode, typePassenger);
 }
 
 int sortPassengers(Passenger* list, int len, int order) //Apellido y tipo de pasajero
@@ -508,8 +493,8 @@ int sortPassengers(Passenger* list, int len, int order) //Apellido y tipo de pas
 				auxPasajeros = list[i];
 				j = i - 1;
 				while ( (j >= 0) &&
-						( compararCadenas (list[j].lastName, auxPasajeros.lastName) == 1  ||
-						 (compararCadenas (auxPasajeros.lastName, list[j].lastName) == 3 && auxPasajeros.typePassenger > list[j].typePassenger) ) )
+						( compararCadenas (list[j].lastName, auxPasajeros.lastName, TEXT_LEN) == 1  ||
+						 (compararCadenas (auxPasajeros.lastName, list[j].lastName, TEXT_LEN) == 3 && auxPasajeros.typePassenger > list[j].typePassenger) ) )
 				{
 					list[j + 1] = list[j];
 					j--;
@@ -525,8 +510,8 @@ int sortPassengers(Passenger* list, int len, int order) //Apellido y tipo de pas
 				auxPasajeros = list[i];
 				j = i - 1;
 				while ( (j >= 0) &&
-						( compararCadenas (list[j].lastName, auxPasajeros.lastName) == 2  ||
-						 (compararCadenas (auxPasajeros.lastName, list[j].lastName) == 3 && auxPasajeros.typePassenger < list[j].typePassenger) ) )
+						( compararCadenas (list[j].lastName, auxPasajeros.lastName, TEXT_LEN) == 2  ||
+						 (compararCadenas (auxPasajeros.lastName, list[j].lastName, TEXT_LEN) == 3 && auxPasajeros.typePassenger < list[j].typePassenger) ) )
 				{
 					list[j + 1] = list[j];
 					j--;
@@ -557,7 +542,7 @@ int sortPassengersByCode(Passenger* list, int len, int order)
 			{
 				auxPasajeros = list[i];
 				j = i - 1;
-				while ( (j >= 0) && compararCadenas (list[j].flycode, auxPasajeros.flycode) == 1)
+				while ( (j >= 0) && compararCadenas (list[j].FK_flycode, auxPasajeros.FK_flycode, TEXT_LEN) == 1)
 				{
 					list[j + 1] = list[j];
 					j--;
@@ -571,7 +556,7 @@ int sortPassengersByCode(Passenger* list, int len, int order)
 			{
 				auxPasajeros = list[i];
 				j = i - 1;
-				while ( (j >= 0) && compararCadenas (list[j].flycode, auxPasajeros.flycode) == 2)
+				while ( (j >= 0) && compararCadenas (list[j].FK_flycode, auxPasajeros.FK_flycode, TEXT_LEN) == 2)
 				{
 					list[j + 1] = list[j];
 					j--;
@@ -585,44 +570,6 @@ int sortPassengersByCode(Passenger* list, int len, int order)
 	return rtn;
 }
 
-int compararCadenas (char* cadenaUno, char* cadenaDos)
-{
-	int rtn = -1;
-	int comparacion;
-	char auxCadenaUno [TEXT_LEN];
-	char auxCadenaDos [TEXT_LEN];
-
-	strcpy (auxCadenaUno,cadenaUno);
-	strcpy (auxCadenaDos,cadenaDos);
-	if (cadenaUno != NULL && cadenaDos != NULL)
-	{
-		toLowerCadena (auxCadenaUno);
-		toLowerCadena (auxCadenaDos);
-		comparacion = strcmp (auxCadenaUno,auxCadenaDos);
-
-		if (comparacion > 0)
-		{
-			rtn = 1;
-		}
-		else if (comparacion < 0)
-		{
-			rtn = 2;
-		}
-		else
-		{
-			rtn = 3;
-		}
-	}
-	return rtn;
-}
-
-void toLowerCadena (char* cadena)
-{
-	for(int i = 0; cadena[i]; i++)
-	{
-		cadena[i] = tolower(cadena[i]);
-	}
-}
 
 int altaForzadaPasajeros (Passenger* list, int len)
 {
@@ -631,7 +578,6 @@ int altaForzadaPasajeros (Passenger* list, int len)
 	int altaRealizada;
 
 	altaRealizada = ePas_AltaForzada();
-	printf ("%d", altaRealizada);
 
 	if (list != NULL && len > 0 && altaRealizada == 0)
 	{
@@ -639,17 +585,16 @@ int altaForzadaPasajeros (Passenger* list, int len)
 		if (indiceLibre != -1)
 		{
 
-			list[indiceLibre] = pas_UnPasajeroForzado (indiceLibre, "Agustin", "Vallario", 120000, "ABC123", 1);
-			list[indiceLibre+1] = pas_UnPasajeroForzado (indiceLibre, "Rodrigo", "Palacios", 100000, "CFR234", 3);
-			list[indiceLibre+2] = pas_UnPasajeroForzado (indiceLibre, "Jimena", "Mendoza", 90054, "GHR736", 1);
-			list[indiceLibre+3] = pas_UnPasajeroForzado (indiceLibre, "Pablo", "Vallario", 250000, "LOL640", 2);
-			list[indiceLibre+4] = pas_UnPasajeroForzado (indiceLibre, "Rosario", "Fernandez", 58642, "ABC123", 4);
+			list[indiceLibre] = pas_UnPasajeroForzado (indiceLibre, "Agustin", "Vallario", 100, "ABC123", 1);
+			list[indiceLibre+1] = pas_UnPasajeroForzado (indiceLibre+1, "Rodrigo", "Palacios", 100, "CFR234", 3);
+			list[indiceLibre+2] = pas_UnPasajeroForzado (indiceLibre+2, "Jimena", "Mendoza", 100, "GHR736", 1);
+			list[indiceLibre+3] = pas_UnPasajeroForzado (indiceLibre+3, "Pablo", "Vallario", 101, "LOL640", 2);
+			list[indiceLibre+4] = pas_UnPasajeroForzado (indiceLibre+4, "Rosario", "Fernandez", 99, "ABC123", 4);
 
 			for (int i = indiceLibre; i < indiceLibre + 5; i++)
 			{
 
 				list[i].id = ePas_ObtenerID();
-				list [i].statusFlight = ACTIVO;
 				list [i].isEmpty = OCUPADO;
 			}
 			rtn = 0;
@@ -665,7 +610,7 @@ Passenger pas_UnPasajeroForzado (int indiceLibre, char* name, char* lastname, fl
 	strncpy(auxLista.name, name, sizeof(auxLista.name));
 	strncpy(auxLista.lastName, lastname, sizeof(auxLista.lastName));
 	auxLista.price = price;
-	strncpy(auxLista.flycode, codeFlight, sizeof(auxLista.flycode));
+	strncpy(auxLista.FK_flycode, codeFlight, sizeof(auxLista.FK_flycode));
 	auxLista.typePassenger = typePassenger;
 
 	return auxLista;

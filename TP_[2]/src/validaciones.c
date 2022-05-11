@@ -31,7 +31,6 @@ int validacionDosCaracteres (char* mensaje, char caracterUno, char caracterDos)
 	{
 		retorno = 0;
 		printf(mensaje);
-		fflush (stdin);
 		charIngresado = toupper(getchar());
 		while (charIngresado != caracterUno && charIngresado != caracterDos)
 		{
@@ -69,6 +68,45 @@ int validacionCaracter (char *mensaje, char caracter)
 	return retorno;
 }
 
+
+int compararCadenas (char* cadenaUno, char* cadenaDos, int len)
+{
+	int rtn = -1;
+	int comparacion;
+	char auxCadenaUno [len];
+	char auxCadenaDos [len];
+
+	strcpy (auxCadenaUno,cadenaUno);
+	strcpy (auxCadenaDos,cadenaDos);
+	if (cadenaUno != NULL && cadenaDos != NULL)
+	{
+		toLowerCadena (auxCadenaUno);
+		toLowerCadena (auxCadenaDos);
+		comparacion = strcmp (auxCadenaUno,auxCadenaDos);
+
+		if (comparacion > 0)
+		{
+			rtn = 1;
+		}
+		else if (comparacion < 0)
+		{
+			rtn = 2;
+		}
+		else
+		{
+			rtn = 3;
+		}
+	}
+	return rtn;
+}
+
+void toLowerCadena (char* cadena)
+{
+	for(int i = 0; cadena[i]; i++)
+	{
+		cadena[i] = tolower(cadena[i]);
+	}
+}
 
 //-----------------------------------------------------------------------------------------------------
 int utn_getString(char* charIngresado, char* mensaje, char* mensajeError, int len, int reintentos)

@@ -11,20 +11,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "validaciones.h"
-#include "ArrayPassenger.h"
+#include "ArrayPassenger-Vuelo.h"
 
 
-#define CANT_PASAJEROS 200
+#define CANT_PASAJEROS 2000
 
 int main(void) {
 	setbuf (stdout,NULL);
 	int opcion;
 
 	Passenger miPasajero [CANT_PASAJEROS];
-	Passenger auxMiPasajero;
+	Vuelo miVuelo [CANT_PASAJEROS];
 
 	//Inicializo la estructura
-	initPassengers(miPasajero, CANT_PASAJEROS);
+	pas_initArray(miPasajero, CANT_PASAJEROS);
 
 	do
 	{
@@ -34,8 +34,7 @@ int main(void) {
 		switch (opcion)
 		{
 			case 1: //Alta
-				if (cargaDatosPasajero (&auxMiPasajero) == 0 &&
-					addPassenger(miPasajero, CANT_PASAJEROS, auxMiPasajero.id, auxMiPasajero.name, auxMiPasajero.lastName, auxMiPasajero.price, auxMiPasajero.typePassenger, auxMiPasajero.flycode) == 0)
+				if (union_altaPassenger (miPasajero, CANT_PASAJEROS, miVuelo, CANT_PASAJEROS) == 0)
 				{
 					puts ("Carga con exito.");
 				}
@@ -46,7 +45,7 @@ int main(void) {
 				break;
 
 			case 2: //Modificar por ID
-				if (pas_Modificacion(miPasajero, CANT_PASAJEROS) == 0)
+				if (union_Modificacion (miPasajero, CANT_PASAJEROS, miVuelo, CANT_PASAJEROS) == 0)
 				{
 					puts("\n * MODIFICACION DE Pasajero Exitosa");
 				}
@@ -57,7 +56,7 @@ int main(void) {
 				break;
 
 			case 3: //Baja de Pasajero
-				if (pas_Baja(miPasajero, CANT_PASAJEROS) == 0)
+				if (union_Baja(miPasajero, CANT_PASAJEROS, miVuelo, CANT_PASAJEROS) == 0)
 				{
 					puts("\n * BAJA DE Pasajero Exitosa");
 				}
@@ -68,11 +67,12 @@ int main(void) {
 				break;
 
 			case 4:  // Informar
-				pas_Informar (miPasajero, CANT_PASAJEROS);
+				union_Informar (miPasajero, CANT_PASAJEROS, miVuelo, CANT_PASAJEROS);
 				break;
 
 			case 5: //Alta forzada
-				if (altaForzadaPasajeros (miPasajero, CANT_PASAJEROS) == 0)
+				if (altaForzadaPasajeros (miPasajero, CANT_PASAJEROS) == 0 &&
+					vue_altaForzada(miVuelo, CANT_PASAJEROS) == 0 )
 				{
 					puts ("\nAlta realizada.");
 				}

@@ -16,6 +16,9 @@
 int validacionDosCaracteres (char* mensaje, char caracterUno, char caracterDos);
 int validacionCaracter (char *mensaje, char caracter);
 
+int compararCadenas (char* cadenaUno, char* cadenaDos, int len);
+void toLowerCadena (char* cadena);
+
 int utn_getString(char* charIngresado, char* mensaje, char* mensajeError, int len, int reintentos);
 int utn_getNombre(char* charIngresado, char* mensaje, char* mensajeError, int len, int reintentos);
 int utn_getDescripcion (char* charIngresado, char* mensaje, char* mensajeError, int len, int reintentos);
