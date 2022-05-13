@@ -22,7 +22,8 @@ void toLowerCadena (char* cadena);
 int utn_getString(char* charIngresado, char* mensaje, char* mensajeError, int len, int reintentos);
 int utn_getNombre(char* charIngresado, char* mensaje, char* mensajeError, int len, int reintentos);
 int utn_getDescripcion (char* charIngresado, char* mensaje, char* mensajeError, int len, int reintentos);
-int utn_getDNI(char* pNumeroIngresado, char* mensaje, char* mensajeError, int len, int reintentos);
+int utn_getDNI(int* pNumeroIngresado, char* mensaje, char* mensajeError, int len, int reintentos);
+int utn_getCodigo(char* charIngresado, char* mensaje, char* mensajeError, int min, int max, int reintentos);
 
 //Para Entero
 int utn_getInt(int* pNumeroIngresado, char* mensaje, char* mensajeError, int min, int max, int reintentos);
@@ -40,9 +41,8 @@ int utn_getFloatAlone(float* pNumeroIngresado, char* mensaje, char* mensajeError
 int utn_getDouble(double* pNumeroIngresado, char* mensaje, char* mensajeError, double min, double max, int reintentos);
 int utn_getDoubleAlone(double* pNumeroIngresado, char* mensaje, char* mensajeError);
 
-
-
 void saltoDeLinea (void);
 void presionarEnter (void);
+void menu (void);
 
 #endif /* VALIDACIONES_H_ */

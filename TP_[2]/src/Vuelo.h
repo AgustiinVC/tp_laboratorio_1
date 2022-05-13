@@ -21,6 +21,7 @@
 
 #define CODIGO 10
 
+//Estructura de Vuelo
 struct
 {
 	int id;

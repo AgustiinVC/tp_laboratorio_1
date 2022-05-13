@@ -13,7 +13,6 @@
 
 int union_altaPassenger (Passenger* aPassenger, int pas_len, Vuelo* aVuelo, int vuelo_len);
 int union_Modificacion (Passenger* aPassenger, int pas_len, Vuelo* aVuelo, int vuelo_len);
-int union_Baja (Passenger* aPassenger, int pas_len, Vuelo* aVuelo, int vuelo_len);
 
 int union_printStruct(Passenger* aPassenger, int pas_len, Vuelo* aVuelo, int vuelo_len);
 int union_printActiveStruct(Passenger* aPassenger, int pas_len, Vuelo* aVuelo, int vuelo_len);

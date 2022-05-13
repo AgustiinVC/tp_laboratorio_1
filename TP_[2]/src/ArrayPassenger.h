@@ -19,10 +19,10 @@
 #define DEMORADO 2
 #define CANCELADO 3
 
-
 #define TEXT_LEN 51
 #define CODIGO 10
 
+//Estructura de Pasajeros
 struct
 {
 	int id;
@@ -35,7 +35,7 @@ struct
 
 }typedef Passenger;
 
-int pas_initArray(Passenger* list, int len);
+int initPassengers(Passenger* list, int len);
 int pas_indexEmpty (Passenger* list, int len);
 int addPassenger(Passenger* list, int len, int id, char name[],char lastName[],float price,int typePassenger, char flycode[]);
 Passenger pas_ModificarUno(Passenger miPasajero);
@@ -44,17 +44,14 @@ int cargaDatosPasajero (Passenger* auxList);
 int findPassengerById(Passenger* list, int len,int id);
 int removePassenger(Passenger* list, int len, int id);
 int pas_Baja (Passenger* list, int len);
-int pas_Informar (Passenger* list, int len);
 int pas_isStrucEmpty (Passenger* list, int len);
 int pas_CalculosPasaje (Passenger* list, int len);
 int printPassenger(Passenger* list, int length);
 void pas_printOne (Passenger* list);
-int printActivePassenger(Passenger* list, int length);
+int sortPassengersByID(Passenger* list, int len);
 int sortPassengers(Passenger* list, int len, int order);
 int sortPassengersByCode(Passenger* list, int len, int order);
 int altaForzadaPasajeros (Passenger* list, int len);
 Passenger pas_UnPasajeroForzado (int indiceLibre, char* name, char* lastname, float price,char* codeFlight,int typePassenger);
-void menu (void);
-
 
 #endif /* ARRAYPASSENGER_H_ */

@@ -8,21 +8,29 @@
 #include "validaciones.h"
 #include "ArrayPassenger.h"
 
-static int Pasajero_idUnico = 0;
+/// Para facilitar en la impresion de los tipos de pasajeros
+static const char PASAJERO_TIPOS [4][30] = {"Primera Clase", "Business", "Premium Economy", "Economy"};
 
+/// Inicio de variable ID Pasajero
+static int Pasajero_idUnico = 1;
+
+/// @fn int ePas_ObtenerID(void)
+/// @brief
+///  Generador de ID de cada pasajero. Suma 1 a la variable
+/// @return devuelve el id de cada pasajero
 static int ePas_ObtenerID (void)
 {
 	return Pasajero_idUnico++;
 }
 
-static int flagAltaForzada = 0;
 
-static int ePas_AltaForzada (void)
-{
-	return flagAltaForzada++;
-}
-
-int pas_initArray(Passenger* list, int len)
+/// @fn int pas_initArray(Passenger*, int)
+/// @brief
+/// funcion para iniciar la estructura pasajeros al poner en LIBRE el campo isEmpty
+/// @param list es la estructura pasajero
+/// @param len es el tamaño de la estructura
+/// @return devuelve un 0 si esta OK. Devuelve un -1 si hay algun error.
+int initPassengers(Passenger* list, int len)
 {
 	int rtn = -1;
 	int i;
@@ -37,6 +45,12 @@ int pas_initArray(Passenger* list, int len)
 	return rtn;
 }
 
+/// @fn int pas_indexEmpty(Passenger*, int)
+/// @brief
+/// funcion para buscar un indice que este vacio
+/// @param list es la estructura pasajero
+/// @param len es el tamaño de la estructura
+/// @return devuelve el indice que se encuentra libre.. Devuelve un -1 si hay algun error.
 int pas_indexEmpty (Passenger* list, int len)
 {
 	int rtn = -1;
@@ -55,6 +69,18 @@ int pas_indexEmpty (Passenger* list, int len)
 	return rtn;
 }
 
+/// @fn int addPassenger(Passenger*, int, int, char[], char[], float, int, char[])
+/// @brief
+///
+/// @param list es la estructura pasajero
+/// @param len es el tamaño de la estructura
+/// @param id es el id del pasajero
+/// @param name es el nombre del pasajero
+/// @param lastName es el apellido del pasajero
+/// @param price es el precio del vuelo del pasajero
+/// @param typePassenger es el tipo de pasajero
+/// @param flycode es el codigo del vuelo
+/// @return devuelve un 0 si esta OK. Devuelve un -1 si hay algun error.
 int addPassenger(Passenger* list, int len, int id, char name[],char lastName[],float price,int typePassenger, char flycode[])
 {
 	int rtn = -1;
@@ -79,6 +105,11 @@ int addPassenger(Passenger* list, int len, int id, char name[],char lastName[],f
 	return rtn;
 }
 
+/// @fn Passenger pas_ModificarUno(Passenger)
+/// @brief
+/// funcion para modificar un pasajero en especifico ya sea cualquiera de sus campos
+/// @param miPasajero es la estructura que se piensa modificar
+/// @return devuelve una estructura con los valores que se quisieron modificar
 Passenger pas_ModificarUno(Passenger miPasajero)
 {
 	int opcion;
@@ -162,6 +193,12 @@ Passenger pas_ModificarUno(Passenger miPasajero)
 	return auxiliar;
 }
 
+/// @fn int pas_Modificacion(Passenger*, int)
+/// @brief modificacion de un pasajero. se imprime la lista de pasajeros. si hay pasajeros se pone en 1 un flag de alta.
+/// se pide que se ingrese alguno de los id mostrados y si se encuentra se modifica dicho id
+/// @param list es la estructura pasajero
+/// @param len es el tamaño de la estructura
+/// @return devuelve un 0 si esta OK. un -1 si hay algun error
 int pas_Modificacion(Passenger* list, int len)
 {
 	int rtn = -1;
@@ -181,7 +218,7 @@ int pas_Modificacion(Passenger* list, int len)
 			while (findPassengerById(list, len, idIngresado) == -1)
 			{
 				puts("NO EXISTE ID.");
-				utn_getIntAlone (&idIngresado ,"\nIngrese un ID: ", "Error. Ingrese un ID correcto.\n");
+				utn_getIntAlone (&idIngresado ,"\nIngrese un ID: ", "Error. Ingrese un ID correcto.\n\n");
 			}
 			index = findPassengerById(list, len, idIngresado);
 			auxiliar = pas_ModificarUno(list[index]);
@@ -192,17 +229,22 @@ int pas_Modificacion(Passenger* list, int len)
 	return rtn;
 }
 
+/// @fn int cargaDatosPasajero(Passenger*)
+/// @brief
+/// carga de datos en un pasajero auxiliar para luego ser cargada en la estructura de pasajeros
+/// @param auxList un pasajero auxiliar
+/// @return devuelve un 0 si esta OK. un -1 si hay algun error
 int cargaDatosPasajero (Passenger* auxList)
 {
 	int rtn = -1;
 	if (auxList != NULL)
 	{
-		if (utn_getNombre(auxList->name, "Ingrese el nombre del pasajero: ", "Ingrese un nombre valido\n", TEXT_LEN, 3) == 0 &&
+		if (utn_getNombre(auxList->name, "\nIngrese el nombre del pasajero: ", "Ingrese un nombre valido\n", TEXT_LEN, 3) == 0 &&
 			utn_getNombre(auxList->lastName, "Ingrese el apellido del pasajero: ", "Ingrese un apellido valido\n ", TEXT_LEN, 3) == 0 &&
-			utn_getFloatPositivo(&auxList->price, "Ingrese el precio del vuelo: ", "Ingrese un precio valido\n ") == 0 &&
+			utn_getFloatPositivo(&auxList->price, "Ingrese el precio del vuelo: ", "Ingrese un precio valido\n") == 0 &&
 			utn_getIntRange(&auxList->typePassenger, "Ingrese el tipo del vuelo: "
 					"\n\t 1 = Primera Clase\n\t 2 = Business\n\t 3 - Premium Economy\n\t 4 - Economy\nIngrese su opcion: ", "Ingrese un tipo de vuelo valido\n", 1,4) == 0 &&
-			utn_getString(auxList->FK_flycode, "Ingrese el codigo del vuelo: ", "Ingrese un codigo valido\n", CODIGO, 3) == 0)
+			utn_getCodigo(auxList->FK_flycode, "Ingrese el codigo del vuelo (Alfanumerico min: 4 caracteres): ", "Ingrese un codigo valido\n", 4, CODIGO, 3) == 0)
 		{
 			auxList->id = ePas_ObtenerID();
 			rtn = 0;
@@ -212,6 +254,14 @@ int cargaDatosPasajero (Passenger* auxList)
 	return rtn;
 }
 
+
+/// @fn int findPassengerById(Passenger*, int, int)
+/// @brief
+/// busca el id en todos los pasajeros dados de alta.
+/// @param list es la estructura pasajero
+/// @param len es la cantidad maxima de pasajeros
+/// @param id del pasajero a buscar
+/// @return devuelve el indice del ID buscado si se encontro y no esta dado de baja. un -1 si hay algun error
 int findPassengerById(Passenger* list, int len,int id)
 {
 	int rtn = -1;
@@ -231,6 +281,14 @@ int findPassengerById(Passenger* list, int len,int id)
 	return rtn;
 }
 
+
+/// @fn int removePassenger(Passenger*, int, int)
+/// @brief
+/// funcion para dar de baja a un pasajero que se haya dado de alta.
+/// @param list es la estructura pasajero
+/// @param len es la cantidad maxima de pasajeros
+/// @param id del pasajero a dar de baja
+/// @return devuelve un 0 si esta OK. Un -1 si hay algun error
 int removePassenger(Passenger* list, int len, int id)
 {
 	int rtn = -1;
@@ -243,13 +301,18 @@ int removePassenger(Passenger* list, int len, int id)
 	return rtn;
 }
 
+/// @fn int pas_Baja(Passenger*, int)
+/// @brief funcion para dar de baja un pasajero. se imprime la lista de pasajeros si hay dados de alta. Luego se pide ingresar
+/// un id que se quiere dar de baja. si se ingreso un id que se encuentra dado de alta, se preocede a dar de baja en la funcion removePassenger.
+/// @param list es la estructura pasajero
+/// @param len es la cantidad maxima de pasajeros
+/// @return devuelve un 0 si esta OK. Un -1 si hay algun error
 int pas_Baja (Passenger* list, int len)
 {
 	int rtn = -1;
 	int idIngresado;
 	int index;
 	int flagAlta = 0;
-
 	if (printPassenger(list, len) == 0)
 	{
 		flagAlta = 1;
@@ -279,71 +342,12 @@ int pas_Baja (Passenger* list, int len)
 	return rtn;
 }
 
-int pas_Informar (Passenger* list, int len)
-{
-	int rtn = -1;
-	int opcion;
-	char respuesta;
-	int flagAlta = 0;
-
-	if (pas_isStrucEmpty(list, len) == 0)
-	{
-		flagAlta = 1;
-	}
-
-	if (list != NULL && len > 0 && flagAlta == 1)
-	{
-		do
-		{
-			fflush(stdin);
-			utn_getIntRange (&opcion ,"\nIngrese la opcion que desea informar:\n "
-											"1 - Listado de los pasajeros ordenados alfabéticamente por Apellido y Tipo de pasajero.\n "
-											"2 - Total y promedio de los precios de los pasajes, y cuántos pasajeros superan el precio promedio.\n "
-											"3 - Listado de los pasajeros por Codigo de vuelo y estados de vuelo ACTIVO\n"
-											"Ingrese su opcion: ",
-											"Error. Ingrese una opcion correcta\n\n", 1, 3);
-
-			switch (opcion)
-			{
-				case 1:
-					utn_getIntRange (&opcion ,"\nIngrese la opcion que desea informar:\n "
-							"1 - Ascendente.\n "
-							"2 - Descendente.\n "
-							"Ingrese su opcion: ",
-							"Error. Ingrese una opcion correcta\n\n", 1, 2);
-					if (sortPassengers(list,  len, opcion) == 0)
-					{
-						printPassenger(list, len);
-					}
-					break;
-
-				case 2:
-					if (pas_CalculosPasaje (list, len) == 0)
-					{
-						rtn = 0;
-					}
-					break;
-
-				case 3:
-					utn_getIntRange (&opcion ,"\nIngrese la opcion que desea informar:\n "
-												"1 - Ascendente.\n "
-												"2 - Descendente.\n "
-												"Ingrese su opcion: ",
-												"Error. Ingrese una opcion correcta\n\n", 1, 2);
-					if (sortPassengersByCode(list,  len, opcion) == 0)
-					{
-						printActivePassenger(list, len);
-					}
-					break;
-			}
-			respuesta = validacionDosCaracteres ("¿Desea informar otra opcion? (S/N)", 'S', 'N');
-		}
-		while (respuesta);
-	}
-	return rtn;
-}
-
-
+/// @fn int pas_isStrucEmpty(Passenger*, int)
+/// @brief
+/// funcion para saber si hay pasajeros dados de alta.
+/// @param list es la estructura pasajero
+/// @param len es la cantidad maxima de pasajeros
+/// @return devuelve un 0 si la estructura no esta vacia. un -1 si esta vacia
 int pas_isStrucEmpty (Passenger* list, int len)
 {
 	int rtn = -1;
@@ -360,6 +364,12 @@ int pas_isStrucEmpty (Passenger* list, int len)
 	return rtn;
 }
 
+/// @fn int pas_CalculosPasaje(Passenger*, int)
+/// @brief
+/// funcion para los calculos de promedio, totales y si alguno supero el promedio.
+/// @param list es la estructura pasajero
+/// @param len es la cantidad maxima de pasajeros
+/// @return devuelve un 0 si esta OK. un -1 si hay algun error
 int pas_CalculosPasaje (Passenger* list, int len)
 {
 	int rtn = -1;
@@ -399,6 +409,13 @@ int pas_CalculosPasaje (Passenger* list, int len)
 	return rtn;
 }
 
+
+/// @fn int printPassenger(Passenger*, int)
+/// @brief
+/// funcion para imprimir los pasajeros dados de alta
+/// @param list es la estructura pasajero
+/// @param length es la cantidad maxima de pasajeros
+/// @return devuelve un 0 si esta ok. un -1 si hay un error.
 int printPassenger(Passenger* list, int length)
 {
 	int rtn = -1;
@@ -406,6 +423,7 @@ int printPassenger(Passenger* list, int length)
 
 	if (list != NULL && length > 0)
 	{
+		sortPassengersByID(list, length);
 		for (int i = 0; i < length; i++)
 		{
 			if (list[i].isEmpty == OCUPADO)
@@ -413,9 +431,10 @@ int printPassenger(Passenger* list, int length)
 				if (flagPrimerPasajero == 0)
 				{
 					flagPrimerPasajero = 1;
-					puts("\n\t\t\t\t> LISTADO PASAJEROS\n"
-							"----------------------------------------------------------------------------------------------------------------------------");
-					printf("%-6s %-52s %-52s %-9s %-13s %-s %-s\n", "ID", "NOMBRE", "APELLIDO", "PRECIO", "CODIGO VUELO", "TIPO PASAJERO", "ESTADO VUELO");
+					puts("\n\t\t\t\t\t\t\t\t> LISTADO PASAJEROS\n"
+							"--------------------------------------------------------------------------------------"
+							"-------------------------------------------------------------------------------");
+					printf("%-6s %-52s %-52s %-14s %-19s %-15s\n", "ID", "NOMBRE", "APELLIDO", "PRECIO", "CODIGO VUELO", "TIPO PASAJERO");
 				}
 
 				pas_printOne (&list[i]);
@@ -427,56 +446,56 @@ int printPassenger(Passenger* list, int length)
 	return rtn;
 }
 
-int printActivePassenger(Passenger* list, int length)
-{
-	int rtn = -1;
-	int flagPrimerPasajero = 0;
-
-	if (list != NULL && length > 0)
-	{
-		for (int i = 0; i < length; i++)
-		{
-			if (list[i].isEmpty == OCUPADO)
-			{
-				if (flagPrimerPasajero == 0)
-				{
-					flagPrimerPasajero = 1;
-					puts("\n\t\t\t\t>\t\t\t\t -----LISTADO PASAJEROS-----");
-					printf("%-6s %-52s %-52s %-15s %-13s %-20s %-30s\n", "ID", "NOMBRE", "APELLIDO", "PRECIO", "CODIGO VUELO", "TIPO PASAJERO", "ESTADO VUELO");
-				}
-
-				pas_printOne (&list[i]);
-				rtn = 0;
-			}
-		}
-	}
-
-	return rtn;
-}
-
+/// @fn void pas_printOne(Passenger*)
+/// @brief
+/// impresion de un solo pasajero
+/// @param list es el pasajero que se va a imprimir
 void pas_printOne (Passenger* list)
 {
-	char typePassenger[TEXT_LEN];
-	switch (list->typePassenger)
-	{
-		case 1:
-			strncpy(typePassenger, "Primera Clase", TEXT_LEN);
-			break;
-		case 2:
-			strncpy(typePassenger, "Business", TEXT_LEN);
-			break;
-		case 3:
-			strncpy(typePassenger, "Premium Economy", TEXT_LEN);
-			break;
-		case 4:
-			strncpy(typePassenger, "Economy", TEXT_LEN);
-			break;
-
-	}
-		printf ("%-6d %-52s %-52s %-15.2f %-13s %-20s\n",
-				list->id, list->name, list->lastName, list->price, list->FK_flycode, typePassenger);
+	printf ("%-6d %-52s %-52s %-14.2f %-19s %-15s\n",
+		list->id, list->name, list->lastName, list->price, list->FK_flycode, PASAJERO_TIPOS [(list->typePassenger)-1]);
 }
 
+/// @fn int sortPassengersByID(Passenger*, int)
+/// @brief
+/// funcion para ordenar los pasajeros por ID menor a mayor
+/// @param list es la estructura pasajero
+/// @param len es la cantidad maxima de pasajeros
+/// @return devuelve un 0 si esta OK. un -1 si hay error
+int sortPassengersByID(Passenger* list, int len)
+{
+	int rtn = -1;
+	int i;
+	int j;
+	Passenger auxPasajeros;
+
+	if (list != NULL && len > 0)
+	{
+				for (i = 1; i < len; i++)
+				{
+					auxPasajeros = list[i];
+					j = i - 1;
+					while ( (j >= 0) && (auxPasajeros.id < list[j].id) )
+					{
+						list[j + 1] = list[j];
+						j--;
+					}
+					list[j + 1] = auxPasajeros;
+				}
+
+				rtn = 0;
+	}
+	return rtn;
+}
+
+
+/// @fn int sortPassengers(Passenger*, int, int)
+/// @brief
+/// funcion para ordenar los pasajeros por Apellido y si hay mismo apellido por tipo de pasajero
+/// @param list es la estructura pasajero
+/// @param len es la cantidad maxima de pasajeros
+/// @param order como se va a ordenar la lista. 1 Ascendente y 0 Descendente
+/// @return devuelve un 0 si esta OK. un -1 si hay error
 int sortPassengers(Passenger* list, int len, int order) //Apellido y tipo de pasajero
 {
 	int rtn = -1;
@@ -486,47 +505,54 @@ int sortPassengers(Passenger* list, int len, int order) //Apellido y tipo de pas
 
 	if (list != NULL && len > 0)
 	{
-		switch (order) {
-		case 1: //ascendente (A a Z - Eco a Primera)
-			for (i = 1; i < len; i++)
-			{
-				auxPasajeros = list[i];
-				j = i - 1;
-				while ( (j >= 0) &&
-						( compararCadenas (list[j].lastName, auxPasajeros.lastName, TEXT_LEN) == 1  ||
-						 (compararCadenas (auxPasajeros.lastName, list[j].lastName, TEXT_LEN) == 3 && auxPasajeros.typePassenger > list[j].typePassenger) ) )
+		switch (order)
+		{
+			case 1: //ascendente (A a Z - Eco a Primera)
+				for (i = 1; i < len; i++)
 				{
-					list[j + 1] = list[j];
-					j--;
+					auxPasajeros = list[i];
+					j = i - 1;
+					while ( (j >= 0) &&
+							( compararCadenas (list[j].lastName, auxPasajeros.lastName, TEXT_LEN) == 1  ||
+							 (compararCadenas (auxPasajeros.lastName, list[j].lastName, TEXT_LEN) == 3 && auxPasajeros.typePassenger > list[j].typePassenger) ) )
+					{
+						list[j + 1] = list[j];
+						j--;
+					}
+					list[j + 1] = auxPasajeros;
 				}
-				list[j + 1] = auxPasajeros;
-			}
 
-			rtn = 0;
-			break;
-		case 2:
-			for (i = 1; i < len; i++)
-			{
-				auxPasajeros = list[i];
-				j = i - 1;
-				while ( (j >= 0) &&
-						( compararCadenas (list[j].lastName, auxPasajeros.lastName, TEXT_LEN) == 2  ||
-						 (compararCadenas (auxPasajeros.lastName, list[j].lastName, TEXT_LEN) == 3 && auxPasajeros.typePassenger < list[j].typePassenger) ) )
+				rtn = 0;
+				break;
+			case 0:
+				for (i = 1; i < len; i++)
 				{
-					list[j + 1] = list[j];
-					j--;
+					auxPasajeros = list[i];
+					j = i - 1;
+					while ( (j >= 0) &&
+							( compararCadenas (list[j].lastName, auxPasajeros.lastName, TEXT_LEN) == 2  ||
+							 (compararCadenas (auxPasajeros.lastName, list[j].lastName, TEXT_LEN) == 3 && auxPasajeros.typePassenger < list[j].typePassenger) ) )
+					{
+						list[j + 1] = list[j];
+						j--;
+					}
+					list[j + 1] = auxPasajeros;
 				}
-				list[j + 1] = auxPasajeros;
-			}
 
-			rtn = 0;
-			break;
+				rtn = 0;
+				break;
 		}
 	}
 	return rtn;
 }
 
-
+/// @fn int sortPassengersByCode(Passenger*, int, int)
+/// @brief
+/// funcion para ordenar los pasajeros por Codigo de vuelo
+/// @param list es la estructura pasajero
+/// @param len es la cantidad maxima de pasajeros
+/// @param order como se va a ordenar la lista. 1 Ascendente y 0 Descendente
+/// @return devuelve un 0 si esta OK. un -1 si hay error
 int sortPassengersByCode(Passenger* list, int len, int order)
 {
 	int rtn = -1;
@@ -551,7 +577,7 @@ int sortPassengersByCode(Passenger* list, int len, int order)
 			}
 			rtn = 0;
 			break;
-		case 2:
+		case 0:
 			for (i = 1; i < len; i++)
 			{
 				auxPasajeros = list[i];
@@ -570,21 +596,22 @@ int sortPassengersByCode(Passenger* list, int len, int order)
 	return rtn;
 }
 
-
+/// @fn int altaForzadaPasajeros(Passenger*, int)
+/// @brief
+/// alta forzada de pasajeros
+/// @param list es la estructura pasajero
+/// @param len es la cantidad maxima de pasajeros
+/// @return devuelve un 0 si esta OK. un -1 si hay error
 int altaForzadaPasajeros (Passenger* list, int len)
 {
 	int rtn = -1;
 	int indiceLibre;
-	int altaRealizada;
 
-	altaRealizada = ePas_AltaForzada();
-
-	if (list != NULL && len > 0 && altaRealizada == 0)
+	if (list != NULL && len > 0)
 	{
 		indiceLibre = pas_indexEmpty (list, len);
 		if (indiceLibre != -1)
 		{
-
 			list[indiceLibre] = pas_UnPasajeroForzado (indiceLibre, "Agustin", "Vallario", 100, "ABC123", 1);
 			list[indiceLibre+1] = pas_UnPasajeroForzado (indiceLibre+1, "Rodrigo", "Palacios", 100, "CFR234", 3);
 			list[indiceLibre+2] = pas_UnPasajeroForzado (indiceLibre+2, "Jimena", "Mendoza", 100, "GHR736", 1);
@@ -604,6 +631,16 @@ int altaForzadaPasajeros (Passenger* list, int len)
 	return rtn;
 }
 
+/// @fn Passenger pas_UnPasajeroForzado(int, char*, char*, float, char*, int)
+/// @brief
+/// funcion para cargar un pasajero en especifico
+/// @param indiceLibre el indice libre del pasajero
+/// @param name el nombre del pasajero
+/// @param lastname el apellido
+/// @param price el precio del vuelo
+/// @param codeFlight el codigo de vuelo
+/// @param typePassenger tipo de pasajero
+/// @return una estructura pasajero auxiliar
 Passenger pas_UnPasajeroForzado (int indiceLibre, char* name, char* lastname, float price, char* codeFlight,int typePassenger)
 {
 	Passenger auxLista;
@@ -614,17 +651,4 @@ Passenger pas_UnPasajeroForzado (int indiceLibre, char* name, char* lastname, fl
 	auxLista.typePassenger = typePassenger;
 
 	return auxLista;
-}
-
-
-void menu (void)
-{	puts ("~~~~~~~~~~~~~~~~~~~~~~~~~");
-	puts ("--Trabajo Practio N°2--\n");
-	puts ("1. Alta de pasajero.");
-	puts ("2. Modificar pasajero ID.");
-	puts ("3. Baja de pasajero");
-	puts ("4. Informar.");
-	puts ("5. Alta forzada");
-	puts ("6. Salir.");
-	puts ("~~~~~~~~~~~~~~~~~~~~~~~~~");
 }

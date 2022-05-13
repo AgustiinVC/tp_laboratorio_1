@@ -8,23 +8,26 @@
 #include "validaciones.h"
 #include "Vuelo.h"
 
+/// para facilitar la impresion del estado de vuelo
 static const char VUELOS_TIPOS [3][10] = {"ACTIVO", "DEMORADO", "CANCELADO"};
 
-static int Vuelo_idUnico = 0;
+static int Vuelo_idUnico = 1;
 
+/// @fn int eVue_ObtenerID(void)
+/// @brief
+/// empieza por 0 y luego va sumando al valor de id.
+/// @return el id unico de un vuelo
 static int eVue_ObtenerID (void)
 {
 	return Vuelo_idUnico++;
 }
 
-static int flagAltaForzada = 0;
-
-static int eVue_AltaForzada (void)
-{
-	return flagAltaForzada++;
-}
-
-
+/// @fn int vue_initArray(Vuelo*, int)
+/// @brief
+/// inicializar vuelos en LIBRE
+/// @param list de la estructura de los vuelo
+/// @param len cantidad maxima de vuelos
+/// @return devuelve un 0 si esta OK. o un -1 si hay error.
 int vue_initArray(Vuelo* list, int len)
 {
 	int rtn = -1;
@@ -40,6 +43,12 @@ int vue_initArray(Vuelo* list, int len)
 	return rtn;
 }
 
+/// @fn int vue_indexEmpty(Vuelo*, int)
+/// @brief
+/// podemos saber si hay un indice libre
+/// @param list de la estructura de los vuelo
+/// @param len cantidad maxima de vuelos
+/// @return devuelve un indice si se encontro algun indice libre. y -1 si no se encontro un indice libre.
 int vue_indexEmpty (Vuelo* list, int len)
 {
 	int rtn = -1;
@@ -58,7 +67,13 @@ int vue_indexEmpty (Vuelo* list, int len)
 	return rtn;
 }
 
-
+/// @fn int addFlight(Vuelo*, int, char*)
+/// @brief
+/// funcion para agregar un vuelo. si hay un vuelo existente con mismo codigo se pregunta si se quiere actualizar el estado de vuelo
+/// @param list de la estructura de los vuelo
+/// @param len cantidad maxima de vuelos
+/// @param flycode el codigo de vuelo ingresado
+/// @return se devuelve un 0 si esta ok. un -1 si hay error.
 int addFlight (Vuelo* list, int len, char* flycode)
 {
 	int rtn = -1;
@@ -71,8 +86,8 @@ int addFlight (Vuelo* list, int len, char* flycode)
 		indice = findFlightByCode (list, len, flycode);
 		if (indice != -1)
 		{
-			puts ("Vuelo existente!");
-			printf ("Estado actual vuelo: %s\n", VUELOS_TIPOS[list[indice].statusFlight-1]);
+			puts ("\n~~Vuelo existente!~~");
+			printf ("Codigo de vuelo ingresado: %s \nEstado actual vuelo: %s\n", list[indice].flycode ,VUELOS_TIPOS[list[indice].statusFlight-1]);
 			fflush(stdin);
 			respuesta  =  validacionDosCaracteres ("¿Desea actualizar el estado del vuelo? (S/N)", 'S', 'N');
 			if (respuesta == 1)
@@ -88,7 +103,7 @@ int addFlight (Vuelo* list, int len, char* flycode)
 			if (indice != -1)
 			{
 				if(utn_getIntRange(&auxEstadoVuelo, "Ingrese el estado del vuelo: "
-									"\n\t 1 = ACTIVO\n\t 2 = DEMORADO\n\t 3 - CANCELADO\nIngrese su opcion: ", "Ingrese un tipo de vuelo valido\n", 1,3) == 0)
+									"\n\t 1 = ACTIVO\n\t 2 = DEMORADO\n\t 3 - CANCELADO\nIngrese su opcion: ", "Ingrese un estado de vuelo valido\n", 1,3) == 0)
 				{
 					list[indice].id = eVue_ObtenerID();
 					strncpy (list[indice].flycode, flycode, CODIGO);
@@ -102,6 +117,13 @@ int addFlight (Vuelo* list, int len, char* flycode)
 	return rtn;
 }
 
+/// @fn int findFlightByCode(Vuelo*, int, char*)
+/// @brief
+/// buscar el id del vuelo al comparar los codigo de vuelo del array de estructura vuelo
+/// @param list de la estructura de los vuelo
+/// @param len cantidad maxima de vuelos
+/// @param flycode el codigo de vuelo ingresado
+/// @return devuelve el indice del codigo de vuelo si se encontro o. un -1 si hay error.
 int findFlightByCode(Vuelo* list, int len, char* flycode)
 {
 	int rtn = -1;
@@ -120,21 +142,25 @@ int findFlightByCode(Vuelo* list, int len, char* flycode)
 	return rtn;
 }
 
+
+/// @fn int vue_altaForzada(Vuelo*, int)
+/// @brief
+/// alta forzada de vuelos
+/// @param list de la estructura de los vuelo
+/// @param len cantidad maxima de vuelos
+/// @return un 0 si esta OK. un -1 si hay error
 int vue_altaForzada (Vuelo* list, int len)
 {
 	int rtn = -1;
 	int indiceLibre;
-	int altaRealizada;
 
-	altaRealizada = eVue_AltaForzada();
-
-	if (list != NULL && len > 0 && altaRealizada == 0)
+	if (list != NULL && len > 0)
 	{
 		indiceLibre = vue_indexEmpty (list, len);
 		if (indiceLibre != -1)
 		{
 
-			list[indiceLibre] = vue_UnElementoForzado (indiceLibre, "ABC123", 1);
+			list[indiceLibre] = vue_UnElementoForzado (indiceLibre, "SAS321", 1);
 			list[indiceLibre+1] = vue_UnElementoForzado (indiceLibre+1, "CFR234", 1);
 			list[indiceLibre+2] = vue_UnElementoForzado (indiceLibre+2, "GHR736", 1);
 			list[indiceLibre+3] = vue_UnElementoForzado (indiceLibre+3, "LOL640", 2);
@@ -153,10 +179,13 @@ int vue_altaForzada (Vuelo* list, int len)
 	return rtn;
 }
 
-char flycode[CODIGO];
-int statusFlight;
-
-
+/// @fn Vuelo vue_UnElementoForzado(int, char*, int)
+/// @brief
+/// carga forzada de los datos de vuelos en una estructura auxiliar
+/// @param indiceLibre el indice donde cargar el alta forzada
+/// @param flyCode el codigo de vuelo
+/// @param statusFlight el estado del vuelo
+/// @return devuelve un astructura auxiliar con los datos del vuelo
 Vuelo vue_UnElementoForzado (int indiceLibre, char* flyCode, int statusFlight)
 {
 	Vuelo auxLista;

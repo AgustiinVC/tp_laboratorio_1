@@ -4,7 +4,7 @@
  Author      : Vallario Cores, Agustín
  Version     :
  Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
+ Description : TP°2 - Aerolinea, Ansi-style
  ============================================================================
  */
 
@@ -24,12 +24,17 @@ int main(void) {
 	Vuelo miVuelo [CANT_PASAJEROS];
 
 	//Inicializo la estructura
-	pas_initArray(miPasajero, CANT_PASAJEROS);
+	initPassengers(miPasajero, CANT_PASAJEROS);
+	vue_initArray(miVuelo, CANT_PASAJEROS);
+
+	//Alta Forzada de pasajeros y de vuelos
+	altaForzadaPasajeros (miPasajero, CANT_PASAJEROS);
+	vue_altaForzada(miVuelo, CANT_PASAJEROS);
 
 	do
 	{
 		menu();
-		utn_getIntRange (&opcion ,"\nIngrese una Opcion: ", "Error. Ingrese una opcion correcta.\n",1,6);
+		utn_getIntRange (&opcion ,"\nIngrese una Opcion: ", "Error. Ingrese una opcion correcta.\n",1,5);
 		fflush (stdin);
 		switch (opcion)
 		{
@@ -56,7 +61,7 @@ int main(void) {
 				break;
 
 			case 3: //Baja de Pasajero
-				if (union_Baja(miPasajero, CANT_PASAJEROS, miVuelo, CANT_PASAJEROS) == 0)
+				if (pas_Baja(miPasajero, CANT_PASAJEROS) == 0)
 				{
 					puts ("\n~~BAJA de pasajero realizada~~\n");
 				}
@@ -76,21 +81,9 @@ int main(void) {
 					puts ("\n~~No se pude realizar el INFORME.~~\n");
 				}
 				break;
-
-			case 5: //Alta forzada
-				if (altaForzadaPasajeros (miPasajero, CANT_PASAJEROS) == 0 &&
-					vue_altaForzada(miVuelo, CANT_PASAJEROS) == 0 )
-				{
-					puts ("\n~~ALTA FORZADA realizada~~\n");
-				}
-				else
-				{
-					puts ("\n~~ALTA FORZADA ya cargada~~\n");
-				}
-				break;
 		}
 	}
-	while (opcion != 6);
+	while (opcion != 5);
 
 	puts ("Salida");
 
