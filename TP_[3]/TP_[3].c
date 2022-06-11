@@ -14,7 +14,7 @@ int main()
 	setbuf (stdout,NULL);
     int opcion = 0; // Opcion que ingresemos
     int flagArchivo = 0; // Bandera para saber si abrimos un Archivo
-    int flagAlta = 0; // Bandera para saber si dimos de alta al menos una vez
+    int flagGuardado = 0;
     LinkedList* listaPasajeros = ll_newLinkedList();
 
     controller_getLastId(); // Tomo el ultimo id ya sea de un archivo aparte o del archivo csv
@@ -66,7 +66,6 @@ int main()
     			case 3: //Alta de Pasajero
     				if (controller_addPassenger(listaPasajeros) == 0)
     				{
-    					flagAlta = 1;
     					puts ("\n~~ALTA de pasajero realizada~~\n");
     				}
     				else
@@ -78,7 +77,7 @@ int main()
     			case 4:  // Editar Pasajeros
     				if (controller_editPassenger(listaPasajeros) == 0)
     				{
-    					puts ("\n~~Se realizo la EDICION con exito~~\n");
+    					puts ("\n~~Se salio de la EDICION con exito~~\n");
     				}
     				else
     				{
@@ -117,12 +116,13 @@ int main()
 					}
 					break;
 				case 8:  // Guardar CSV
-					if (flagArchivo == 1)
+					if (flagArchivo == 1 || flagGuardado == 1)
 					{
 						if (controller_saveAsText("data.csv", listaPasajeros) == 0)
 						{
 							flagArchivo = 0;
-							flagAlta = 0;
+							flagGuardado = 1;
+
 							controller_setLastId();
 							puts ("\n~~Se realizo el guardado del CSV~~\n");
 						}
@@ -137,12 +137,12 @@ int main()
 					}
 					break;
     			case 9:  // Guardar BIN
-    				if (flagArchivo == 1) // Va a entrar siempre. El unico caso donde no entro es cuando elijo no a sobreescribir el archivo
+    				if (flagArchivo == 1 || flagGuardado == 1) // Va a entrar siempre. El unico caso donde no entro es cuando elijo no a sobreescribir el archivo
     				{
     					if (controller_saveAsBinary("data.bin", listaPasajeros) == 0)
 						{
 							flagArchivo = 0;
-							flagAlta = 0;
+							flagGuardado = 1;
 							controller_setLastId();
 							puts ("\n~~Se realizo el guardado del BIN~~\n");
 						}
@@ -157,14 +157,10 @@ int main()
     				}
 					break;
     			case 10: // Salida. Si di de alta un pasajero o si abro un archivo y nunca guarde me impide salir.
-    				if (flagArchivo != 0 || flagAlta != 0)
+    				if (flagGuardado != 1)
     				{
     					opcion = -1;
     					puts ("Guarde antes de salir. Muchas gracias!");
-    					if (flagArchivo == 0)
-    					{
-    						puts("ATENCION! No cargo los pasajeros del Archivo. Puede sobreescribirlos sino los carga antes de guardar.");
-    					}
     				}
     				break;
     		}

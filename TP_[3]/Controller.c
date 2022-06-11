@@ -175,8 +175,9 @@ int controller_editPassenger(LinkedList* pArrayListPassenger)
 											"3 - Precio\n "
 											"4 - Codigo de Vuelo\n "
 											"5 - Tipo de Pasajero\n "
-											"6 - Estado del Vuelo\nOpcion: ",
-											"Error. Ingrese una opcion correcta\n\n", 1, 6);
+											"6 - Estado del Vuelo\n "
+											"7 - Salir\nOpcion: ",
+											"Error. Ingrese una opcion correcta\n\n", 1, 7);
 
 				switch (opcion)
 				{
@@ -254,9 +255,14 @@ int controller_editPassenger(LinkedList* pArrayListPassenger)
 							puts("No se pudo cargar el tipo del vuelo");
 						}
 						break;
+					case 7:
+						respuesta = 0;
+						break;
 				}
-
-				respuesta = validacionDosCaracteres ("¿Desea modificar otro campo? (S/N)", 'S', 'N');
+				if (opcion != 7)
+				{
+					respuesta = validacionDosCaracteres ("¿Desea modificar otro campo? (S/N)", 'S', 'N');
+				}
 			}
 			while (respuesta);
 			if (ll_set(pArrayListPassenger, indice, pAuxPasajero) == 0)
