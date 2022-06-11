@@ -7,7 +7,6 @@
  * \return int
  *
  */
-
 int parser_PassengerFromText(FILE* pFile , LinkedList* pArrayListPassenger)
 {
 	int r;
@@ -96,6 +95,11 @@ int parser_PassengerFromBinary(FILE* pFile , LinkedList* pArrayListPassenger)
 	return rtn;
 }
 
+/// @fn int parser_PassengerLastIdFromText(FILE*)
+/// @brief parseamos el archivo de pasajeros donde tomamos solo el ultimo id para poder tener como referencia
+/// parsea el ultimo id que obtenemos del archivo csv
+/// @param pFile puntero al archivo donde tenemos los pasajeros y vamos a recorrer viendo el id mas alto
+/// @return un 0 si esta Ok y un -1 si hay error
 int parser_PassengerLastIdFromText(FILE* pFile)
 {
 	int r;
@@ -142,6 +146,11 @@ int parser_PassengerLastIdFromText(FILE* pFile)
 	return rtn;
 }
 
+/// @fn int parser_LastIdFromText(FILE*)
+/// @brief
+/// parsea el entero del archivo donde guardamos el ultimo id
+/// @param pFile puntero al archivo donde tenemos guardado el ultimo id
+/// @return un 0 si esta Ok y un -1 si hay error
 int parser_LastIdFromText(FILE* pFile)
 {
 	int rtn = -1;

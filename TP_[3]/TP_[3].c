@@ -12,12 +12,12 @@
 int main()
 {
 	setbuf (stdout,NULL);
-    int opcion = 0;
-    int flagGuardado = 0;
+    int opcion = 0; // Opcion que ingresemos
+    int flagArchivo = 0; // Bandera para saber si abrimos un Archivo
+    int flagAlta = 0; // Bandera para saber si dimos de alta al menos una vez
     LinkedList* listaPasajeros = ll_newLinkedList();
 
-    controller_getLastId();
-    // ME QUEDA VER GUARDADO csv
+    controller_getLastId(); // Tomo el ultimo id ya sea de un archivo aparte o del archivo csv
     do
     	{
     		menu();
@@ -25,12 +25,12 @@ int main()
     		fflush (stdin);
     		switch (opcion)
     		{
-    			case 1: //Abrir el csv (abre bien el data)
-    				if (flagGuardado == 0) //funca
+    			case 1: //Abrir el csv
+    				if (flagArchivo == 0) //funca
     				{
     					if (controller_loadFromText("data.csv", listaPasajeros) == 0)
     					{
-    						flagGuardado = 1;
+    						flagArchivo = 1;
     						puts ("\n~~Lectura del archivo CSV correcta~~\n");
     					}
     					else
@@ -40,16 +40,16 @@ int main()
     				}
     				else
     				{
-    					puts("\n~~Ya se cargo el CSV~~\n");
+    					puts("\n~~Ya se cargo el Archivo~~\n");
     				}
     				break;
 
     			case 2: //Abrir el bin
-    				if (flagGuardado == 0)
+    				if (flagArchivo == 0)
     				{
     					if (controller_loadFromBinary("data.bin", listaPasajeros) == 0)
     					{
-    						flagGuardado = 1;
+    						flagArchivo = 1;
     						puts ("\n~~Lectura del archivo BIN correcta~~\n");
     					}
     					else
@@ -59,13 +59,14 @@ int main()
     				}
     				else
     				{
-    					puts("\n~~Ya se cargo el BIN~~\n");
+    					puts("\n~~Ya se cargo el Archivo~~\n");
     				}
     				break;
 
     			case 3: //Alta de Pasajero
     				if (controller_addPassenger(listaPasajeros) == 0)
     				{
+    					flagAlta = 1;
     					puts ("\n~~ALTA de pasajero realizada~~\n");
     				}
     				else
@@ -116,34 +117,54 @@ int main()
 					}
 					break;
 				case 8:  // Guardar CSV
-					if (controller_saveAsText("data.csv", listaPasajeros) == 0)
+					if (flagArchivo == 1)
 					{
-						flagGuardado = 0;
-						controller_setLastId();
-						puts ("\n~~Se realizo el guardado del CSV~~\n");
+						if (controller_saveAsText("data.csv", listaPasajeros) == 0)
+						{
+							flagArchivo = 0;
+							flagAlta = 0;
+							controller_setLastId();
+							puts ("\n~~Se realizo el guardado del CSV~~\n");
+						}
+						else
+						{
+							puts ("\n~~No se pudo guardar el CSV.~~\n");
+						}
 					}
 					else
 					{
-						puts ("\n~~No se pudo guardar el CSV.~~\n");
+						puts ("Asegurese de abrir el archivo antes de guardar. Muchas Gracias!");
 					}
 					break;
     			case 9:  // Guardar BIN
-					if (controller_saveAsBinary("data.bin", listaPasajeros) == 0)
-					{
-						flagGuardado = 0;
-						controller_setLastId();
-						puts ("\n~~Se realizo el guardado del BIN~~\n");
-					}
-					else
-					{
-						puts ("\n~~No se pudo guardar el BIN.~~\n");
-					}
+    				if (flagArchivo == 1) // Va a entrar siempre. El unico caso donde no entro es cuando elijo no a sobreescribir el archivo
+    				{
+    					if (controller_saveAsBinary("data.bin", listaPasajeros) == 0)
+						{
+							flagArchivo = 0;
+							flagAlta = 0;
+							controller_setLastId();
+							puts ("\n~~Se realizo el guardado del BIN~~\n");
+						}
+						else
+						{
+							puts ("\n~~No se pudo guardar el BIN.~~\n");
+						}
+    				}
+    				else
+    				{
+    					puts ("Asegurese de abrir el archivo antes de guardar. Muchas Gracias!");
+    				}
 					break;
-    			case 10:
-    				if (flagGuardado != 0)
+    			case 10: // Salida. Si di de alta un pasajero o si abro un archivo y nunca guarde me impide salir.
+    				if (flagArchivo != 0 || flagAlta != 0)
     				{
     					opcion = -1;
     					puts ("Guarde antes de salir. Muchas gracias!");
+    					if (flagArchivo == 0)
+    					{
+    						puts("ATENCION! No cargo los pasajeros del Archivo. Puede sobreescribirlos sino los carga antes de guardar.");
+    					}
     				}
     				break;
     		}

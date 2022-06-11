@@ -818,6 +818,12 @@ int getDNI (int* pNumeroIngresado)
 	return rtn;
 }
 
+/// @fn int getIntFromStr(char*, int*)
+/// @brief
+/// tomamos una cadena y devolvemos un entero
+/// @param cadena	cadena de caracteres a convertir en entero
+/// @param pNumeroIngresado	donde vamos a guardar el nnumero
+/// @return un 0 si esta OK un -1 si hay error
 int getIntFromStr (char* cadena, int* pNumeroIngresado)
 {
 	int rtn = -1;
@@ -831,6 +837,12 @@ int getIntFromStr (char* cadena, int* pNumeroIngresado)
 	return rtn;
 }
 
+/// @fn int getFloatFromStr(char*, float*)
+/// @brief
+/// tomamos una cadena y devolvemos un flotante
+/// @param cadena	cadena de caracteres a convertir en flotante
+/// @param pNumeroIngresado	donde vamos a guardar el nnumero
+/// @return un 0 si esta OK un -1 si hay error
 int getFloatFromStr (char* cadena, float* pNumeroIngresado)
 {
 	int rtn = -1;

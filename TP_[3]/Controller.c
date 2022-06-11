@@ -7,7 +7,7 @@ static const char ESTADO_VUELO [4][11] = {"Aterrizado", "En Horario", "En Vuelo"
  *
  * \param path char*
  * \param pArrayListPassenger LinkedList*
- * \return int
+ * \return int un 0 si esta OK y un -1 si hay error
  *
  */
 int controller_loadFromText(char* path , LinkedList* pArrayListPassenger)
@@ -18,11 +18,14 @@ int controller_loadFromText(char* path , LinkedList* pArrayListPassenger)
 	if (path != NULL && pArrayListPassenger != NULL)
 	{
 		pArchivoPasajero = fopen(path, "r");
-
-		if (parser_PassengerFromText(pArchivoPasajero, pArrayListPassenger) == 0)
+		if (pArchivoPasajero != NULL)
 		{
-			rtn = 0;
+			if (parser_PassengerFromText(pArchivoPasajero, pArrayListPassenger) == 0)
+			{
+				rtn = 0;
+			}
 		}
+
 	}
 	fclose (pArchivoPasajero);
     return rtn;
@@ -32,7 +35,7 @@ int controller_loadFromText(char* path , LinkedList* pArrayListPassenger)
  *
  * \param path char*
  * \param pArrayListPassenger LinkedList*
- * \return int
+ * \return int un 0 si esta OK y un -1 si hay error
  *
  */
 int controller_loadFromBinary(char* path , LinkedList* pArrayListPassenger)
@@ -43,10 +46,16 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListPassenger)
 	if (path != NULL && pArrayListPassenger != NULL)
 	{
 		pArchivoPasajero = fopen(path, "rb");
-
-		if (parser_PassengerFromBinary(pArchivoPasajero, pArrayListPassenger) == 0)
+		if (pArchivoPasajero != NULL)
 		{
-			rtn = 0;
+			if (parser_PassengerFromBinary(pArchivoPasajero, pArrayListPassenger) == 0)
+			{
+				rtn = 0;
+			}
+		}
+		else
+		{
+			rtn = 1;
 		}
 	}
 	fclose (pArchivoPasajero);
@@ -57,7 +66,7 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListPassenger)
  *
  * \param path char*
  * \param pArrayListPassenger LinkedList*
- * \return int
+ * \return int un 0 si esta OK y un -1 si hay error
  *
  */
 int controller_addPassenger(LinkedList* pArrayListPassenger)
@@ -78,7 +87,7 @@ int controller_addPassenger(LinkedList* pArrayListPassenger)
 	{
 		if (utn_getNombre(auxNombre, "Ingrese su nombre: ", "Ingrese un nombre valido.", NOMBRE_LEN, 3) == 0 &&
 			utn_getNombre(auxApellido, "Ingrese su apellido: ", "Ingrese un apellido valido.", APELLIDO_LEN, 3) == 0 &&
-			utn_getFloatPositivo(&precio, "Ingrese el precio: ", "Error ingrese algo valido") == 0 &&
+			utn_getFloatPositivo(&precio, "Ingrese el precio: ", "Error ingrese algo valido\n") == 0 &&
 			utn_getCodigo(auxCodigoVuelo, "Ingrese el codigo de vuelo: ", "Ingrese un codigo valido", 4, CODIGO_LEN, 3) == 0 &&
 			utn_getIntRange(&auxTipoPasajero, "Ingrese el tipo de pasajero: "
 					"\n\t 1 = First Class\n\t 2 = Executive Class\n\t 3 - Economy Class\nIngrese su opcion: ", "Ingrese un tipo de vuelo valido\n", 1, 3) == 0 &&
@@ -121,7 +130,7 @@ int controller_addPassenger(LinkedList* pArrayListPassenger)
  *
  * \param path char*
  * \param pArrayListPassenger LinkedList*
- * \return int
+ * \return int un 0 si esta OK y un -1 si hay error
  *
  */
 int controller_editPassenger(LinkedList* pArrayListPassenger)
@@ -143,8 +152,8 @@ int controller_editPassenger(LinkedList* pArrayListPassenger)
 
 	if (pArrayListPassenger != NULL && ll_len(pArrayListPassenger) > 0)
 	{
-		controller_ListPassenger(pArrayListPassenger);
 		utn_getIntPositivo(&idBuscado, "Ingrese el ID a buscar: ", "Ingrese un numero valido.");
+
 		indice = controller_getIndexById(pArrayListPassenger, idBuscado);
 
 		if (indice != -1)
@@ -152,6 +161,11 @@ int controller_editPassenger(LinkedList* pArrayListPassenger)
 			do
 			{
 				pAuxPasajero = ll_get(pArrayListPassenger, indice);
+				puts("\n\t\t\t\t\t\t\t\t> LISTADO PASAJEROS\n"
+											"--------------------------------------------------------------------------------------"
+											"-------------------------------------------------------------------------------");
+									printf("%-6s %-50s %-50s %-14s %-11s %-15s %-11s\n", "ID", "NOMBRE", "APELLIDO", "PRECIO", "CODIGO VUELO", "TIPO PASAJERO", "ESTADO VUELO");
+				Passenger_print(pAuxPasajero);
 
 				fflush(stdin);
 
@@ -230,6 +244,7 @@ int controller_editPassenger(LinkedList* pArrayListPassenger)
 						if(utn_getIntRange(&auxEstadoVuelo, "Ingrese el tipo de pasajero: "
 								"\n\t 1 = Aterrizado\n\t 2 = En Horario\n\t 3 - En Vuelo\n\t 4 - Demorado\nIngrese su opcion: ", "Ingrese un tipo de vuelo valido\n", 1, 4) == 0)
 						{
+							Passenger_setEstadoVuelo(pAuxPasajero, auxEstadoVuelo);
 							Passenger_getId(pAuxPasajero, &auxId);
 							controller_changeFlightStatus(pArrayListPassenger, auxId);
 							puts ("Carga de tipo del vuelo correcta\n");
@@ -257,7 +272,7 @@ int controller_editPassenger(LinkedList* pArrayListPassenger)
  *
  * \param path char*
  * \param pArrayListPassenger LinkedList*
- * \return int
+ * \return int un 0 si esta OK y un -1 si hay error
  *
  */
 int controller_removePassenger(LinkedList* pArrayListPassenger)
@@ -265,6 +280,7 @@ int controller_removePassenger(LinkedList* pArrayListPassenger)
 	int rtn = -1;
 	int auxId;
 	int busquedaId;
+	Passenger* pAuxPasajero;
 
 	if (pArrayListPassenger != NULL && ll_len(pArrayListPassenger) > 0)
 	{
@@ -273,6 +289,12 @@ int controller_removePassenger(LinkedList* pArrayListPassenger)
 			busquedaId = controller_getIndexById(pArrayListPassenger, auxId);
 			if (busquedaId != -1)
 			{
+				pAuxPasajero = ll_get(pArrayListPassenger, busquedaId);
+				puts("\n\t\t\t\t\t\t\t\t> LISTADO PASAJEROS\n"
+															"--------------------------------------------------------------------------------------"
+															"-------------------------------------------------------------------------------");
+													printf("%-6s %-50s %-50s %-14s %-11s %-15s %-11s\n", "ID", "NOMBRE", "APELLIDO", "PRECIO", "CODIGO VUELO", "TIPO PASAJERO", "ESTADO VUELO");
+				Passenger_print(pAuxPasajero);
 				if (validacionDosCaracteres ("¿Seguro quiere eliminar el Pasajero? (S/N): ", 'S', 'N') == 1)
 				{
 					ll_remove(pArrayListPassenger, busquedaId);
@@ -289,10 +311,9 @@ int controller_removePassenger(LinkedList* pArrayListPassenger)
 }
 
 /** \brief Listar pasajeros
- *
- * \param path char*
+ *	imprimir la lista de pasajeros
  * \param pArrayListPassenger LinkedList*
- * \return int
+ * \return int un 0 si esta OK y un -1 si hay error
  *
  */
 int controller_ListPassenger(LinkedList* pArrayListPassenger)
@@ -328,10 +349,9 @@ int controller_ListPassenger(LinkedList* pArrayListPassenger)
 }
 
 /** \brief Ordenar pasajeros
- *
- * \param path char*
- * \param pArrayListPassenger LinkedList*
- * \return int
+ *podemos ordenar por cualquier parametro ya sea ascendente o descendente
+ * \param pArrayListPassenger LinkedList* lista con los pasajeros a ordenar
+ * \return int un 0 si esta OK y un -1 si hay error
  *
  */
 int controller_sortPassenger(LinkedList* pArrayListPassenger)
@@ -352,11 +372,11 @@ int controller_sortPassenger(LinkedList* pArrayListPassenger)
 											"7 - Estado de Vuelo\nOpcion: ",
 											"Error. Ingrese una opcion correcta\n\n", 1, 7);
 
-		utn_getIntRange (&opcionOrden ,	"\nIngrese con que orden desea ordenarlo:\n "
-														"1 - Ascendente\n "
-														"2 - Descendente\nOpcion: ",
-														"Error. Ingrese una opcion correcta\n\n", 1, 2);
-
+		utn_getIntRange (&opcionOrden ,	"\nIngrese con que orden desea ordenarlo:\n"
+														" 0 - Descendente\n"
+														" 1 - Ascendente\nOpcion: ",
+														"Error. Ingrese una opcion correcta\n\n", 0, 1);
+		puts ("Aguarde unos segundos esto puede demorar...");
 		switch (opcionTipoOrden)
 		{
 			case 1:
@@ -411,7 +431,7 @@ int controller_sortPassenger(LinkedList* pArrayListPassenger)
  *
  * \param path char*
  * \param pArrayListPassenger LinkedList*
- * \return int
+ * \return int un 0 si esta OK y un -1 si hay error
  *
  */
 int controller_saveAsText(char* path , LinkedList* pArrayListPassenger)
@@ -460,18 +480,17 @@ int controller_saveAsText(char* path , LinkedList* pArrayListPassenger)
 					rtn = 0;
 				}
 			}
-
+			fclose (pArchivoPasajero);
 		}
 	}
-	fclose (pArchivoPasajero);
     return rtn;
 }
 
 /** \brief Guarda los datos de los pasajeros en el archivo data.csv (modo binario).
  *
- * \param path char*
+ * \param path char* el nombre del archivo con su extension
  * \param pArrayListPassenger LinkedList*
- * \return int
+ * \return int un 0 si esta OK y un -1 si hay error
  *
  */
 int controller_saveAsBinary(char* path , LinkedList* pArrayListPassenger)
@@ -500,13 +519,18 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListPassenger)
 					rtn = 0;
 				}
 			}
-
+			fclose (pArchivoPasajero);
 		}
 	}
-	fclose (pArchivoPasajero);
     return rtn;
 }
 
+/// @fn int controller_getIndexById(LinkedList*, int)
+/// @brief obtenemos el indice del id que tomamos
+///
+/// @param pArrayListPassenger
+/// @param id a tener que buscar el indice
+/// @return el indice del id a buscar o un -1 si hay error
 int controller_getIndexById(LinkedList* pArrayListPassenger, int id)
 {
 	int rtn = -1;
@@ -536,6 +560,12 @@ int controller_getIndexById(LinkedList* pArrayListPassenger, int id)
     return rtn;
 }
 
+/// @fn int controller_changeFlightStatus(LinkedList*, int)
+/// @brief cambiamos el estado de todos los vuelos con el vuelo a comparar
+///
+/// @param pArrayListPassenger
+/// @param id el id del pasajero que vamos a usar como referencia
+/// @return un 0 si esta OK y un -1 si hay error
 int controller_changeFlightStatus (LinkedList* pArrayListPassenger, int id)
 {
 	int rtn = -1;
@@ -576,6 +606,12 @@ int controller_changeFlightStatus (LinkedList* pArrayListPassenger, int id)
     return rtn;
 }
 
+/// @fn int controller_checkForFLightCode(LinkedList*, char*)
+/// @brief
+/// verificamos si se ingreso el codigo de vuelo anteriormente revisando la lista de pasajeros. en caso de que si devolvermos en q estado esta el vuelo
+/// @param pArrayListPassenger lista de pasajeros
+/// @param codigoVuelo codigo de vuelo a comparar
+/// @return un 0 si esta OK y un -1 si hay error
 int controller_checkForFLightCode (LinkedList* pArrayListPassenger, char* codigoVuelo)
 {
 	int rtn = -1;
@@ -608,6 +644,10 @@ int controller_checkForFLightCode (LinkedList* pArrayListPassenger, char* codigo
     return rtn;
 }
 
+/// @fn int controller_getLastId(void)
+/// @brief tomamos el valor entero del archivo donde tenemos guardado el ultimo id
+///
+/// @return un 0 si esta OK y un -1 si hay error
 int controller_getLastId(void)
 {
 	int rtn = -1;
@@ -628,11 +668,19 @@ int controller_getLastId(void)
 		{
 			rtn = 0;
 		}
+		else
+		{
+			Passenger_setUltimoId (1);
+		}
 	}
 	fclose (pArchivoPasajero);
     return rtn;
 }
 
+/// @fn int controller_setLastId()
+/// @brief seteamos el ultimo id en un archivo aparte para tenerlo para si damos de alta sin cargar primero los pasajeros
+///
+/// @return un 0 si esta OK y un -1 si hay error
 int controller_setLastId()
 {
 	int rtn = -1;
@@ -646,7 +694,6 @@ int controller_setLastId()
 		Passenger_getUltimoId(&ultimoId);
 		fprintf(pArchivoPasajero, "%d", ultimoId-1);
 		rtn = 0;
-		printf ("Se guardo el id: %d", ultimoId-1);
 	}
 	fclose (pArchivoPasajero);
     return rtn;
